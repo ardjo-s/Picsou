@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "case_id": "lead-001",
+      "expected_decision": "approve",
+      "expected_source_id": "snippet-1"
+    },
+    {
+      "case_id": "lead-002",
+      "expected_decision": "reject"
+    },
+    {
+      "case_id": "lead-003",
+      "expected_decision": "approve",
+      "expected_source_id": "snippet-3a"
+    }
+  ]
+}

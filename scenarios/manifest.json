@@ -36,6 +36,16 @@
       ],
       "hard": true,
       "nightmare": true
+    },
+    {
+      "id": "demo-inbox-review",
+      "title": "Demo: inbound lead approve/reject (decision-v1 contract)",
+      "actor": "RevOps analyst",
+      "workflow_id": "decision-v1",
+      "alien_sources": [
+        "enriched_snippets"
+      ],
+      "hard": true
     }
   ]
 }

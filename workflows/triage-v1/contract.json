@@ -1,0 +1,55 @@
+{
+  "id": "triage-v1",
+  "version": "1.0.0",
+  "label": "Science attention triage",
+  "scorer_id": "triage-v1",
+  "benchmark": {
+    "benchmark_id": "picsou-triage-v1",
+    "workflow_version": "1.0.0",
+    "scoring": {
+      "quality_components": {
+        "priority_accuracy": 0.55,
+        "evidence_exactness": 0.3,
+        "attention_fit_accuracy": 0.15
+      },
+      "recommendation_components": {
+        "quality": 0.55,
+        "cost_efficiency": 0.2,
+        "latency_efficiency": 0.15,
+        "token_efficiency": 0.1
+      },
+      "minimum_quality_to_recommend": 0.75
+    }
+  },
+  "packing": {
+    "preamble_lines": [
+      "Triage every case in this packed {evidence_mode} packet.",
+      "workflow_version must be exactly {workflow_version}.",
+      "Return only the required structured JSON."
+    ],
+    "include_researcher_profile": true,
+    "record_fields": ["title", "year", "topics", "access", "openaire_id"]
+  },
+  "fixture": {
+    "ops": {
+      "set_high": { "attention_fit": true, "priority": "high" },
+      "set_medium": { "attention_fit": true, "priority": "medium" },
+      "set_skip": {
+        "attention_fit": false,
+        "priority": "skip",
+        "clear_signals": true
+      }
+    },
+    "trial_ops": ["set_skip", "set_medium", "set_high"]
+  },
+  "calibration": {
+    "oracle_meaning": "Theoretical ceiling: perfect triage + exact evidence on frozen ground truth for this scenario.",
+    "metric_keys": [
+      "priority_accuracy",
+      "attention_fit_accuracy",
+      "signal_f1",
+      "evidence_exactness"
+    ]
+  },
+  "output_shape_hint": "Return ONLY JSON. results length must equal case count. Each result needs case_id, title, attention_fit (boolean), priority (high|medium|skip), signals[]. priority MUST be skip when attention_fit is false. signal_type is relevance_hook|method_signal|impact_claim. evidence_quote must be an exact substring (≥10 chars) of the matching source text."
+}
