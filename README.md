@@ -68,7 +68,7 @@ Built-in contracts live under `workflows/`:
 
 Clone `workflows/_template/` and `scenarios/_template/` for a new domain. Point
 `workflow_id` on a manifest entry at your contract. Design new workflows with
-`/picsou-grill` (local skill).
+[`/picsou-grill`](.cursor/skills/picsou-grill/SKILL.md) (Cursor skill).
 
 ## How it works
 
@@ -158,18 +158,37 @@ lower estimated cost.
 Nightmare packs live under `scenarios/nightmare-*` (heat lineage, ICU protocol
 fork, Track 3 adversarial traps).
 
+## Cursor skills
+
+Agent skills live under [`.cursor/skills/`](.cursor/skills/). Full map:
+[docs/skills.md](docs/skills.md).
+
+| Invoke | Job |
+| --- | --- |
+| `/Picsou` | Run thrift matrix + open canvas report |
+| `/picsou-grill` | Wave interview → new workflow brief |
+| `/picsou-grill-auto` | Same brief; agent answers all waves |
+| `/picsou-readme` | Refresh README from method pillars |
+| `/picsou-method` | Alias of `/picsou-readme` |
+| `/picsou-eval-review` | Deep-dive eval methodology for a scenario |
+
+Typical path: grill → scaffold `scenarios/<id>/` → `/Picsou` → optional
+`/picsou-eval-review` / `/picsou-readme`.
+
 ## Layout
 
 ```text
-config/      model candidates + pricing estimates
-workflows/   workflow contracts (triage-v1, decision-v1, _template)
-scenarios/   matrix use cases (manifest.json)
-src/        packer, matrix eval, scoring helpers
-scripts/    score + repo contract checks
-examples/   perfect fixture output
-docs/demo/  jury demo (JURY-DEMO.md) + kid guide + sample report
-workflow/   legacy single-benchmark contract
-test/       node:test coverage
+config/           model candidates + pricing estimates
+workflows/        workflow contracts (triage-v1, decision-v1, _template)
+scenarios/        matrix use cases (manifest.json)
+src/              packer, matrix eval, scoring helpers
+scripts/          score + repo contract checks
+examples/         perfect fixture output
+docs/demo/        jury demo (JURY-DEMO.md) + kid guide + sample report
+docs/skills.md    Cursor skill map + usage flow
+.cursor/skills/   Cursor agent skills (SKILL.md per command)
+workflow/         legacy single-benchmark contract
+test/             node:test coverage
 ```
 
 ## License
