@@ -54,7 +54,7 @@ For **designing a new workflow** (waves of questions → scenario brief), use
 `/picsou-grill` (human Q&A) or `/picsou-grill-auto` (LLM answers all waves).
 
 For **README / methodology messaging** (packing, scoring, Alien axis, boundaries),
-use `/picsou-readme` (alias: `/picsou-method`).
+use `/picsou-readme`.
 
 For **in-depth custom eval methodology** (grill → packet → score → matrix),
 use `/picsou-eval-review`.

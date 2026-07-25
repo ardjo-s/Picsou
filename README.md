@@ -6,9 +6,12 @@
 
 Thrifty attention routing for small language models.
 
-Picsou packs a frozen evidence packet, runs the same triage task on **Gemma 4 E2B**
-and light baselines (with or without Alien-enriched context), scores exact-quote
-JSON outputs, and recommends the cheapest model that still hits quality.
+**Attention, not chat.** Picsou optimizes who/what deserves attention — structured
+triage (fit, priority, signals, evidence), not open-ended conversation.
+
+Pack decision-bearing context → run the same triage on SLM vs baselines × Alien
+on/off → score exact-quote JSON → recommend the cheapest model that still hits
+quality.
 
 ## Why Picsou
 
@@ -53,15 +56,17 @@ Picsou is not another chatbot. It is a **thrift router for attention**:
 **Bottom line:** keep expensive models for the hard cases; run thrifty SLMs on
 packed context for the rest — and prove the tradeoff with numbers.
 
-## Any decision workflow
+## Workflow fit
 
-Picsou is a **universal thrift harness for decision workflows**, not a single
-triage product. A workflow plugs in when it declares:
+**Good fit:** triage / ranking / keep-skim-skip over candidates with citable text
+evidence (papers, leads, protocols, tickets).
 
-- frozen input packet(s) (baseline + optional Alien mirror)
-- structured JSON judgment schema
-- ground truth + perfect oracle output
-- how to score quality (field matchers + weights in the contract)
+**Poor fit:** creative writing, multi-step tool agents, UI chat, tasks without
+freezable ground truth or exact-quote evidence.
+
+A workflow plugs in when it declares frozen packet(s) (baseline + optional Alien
+mirror), a structured JSON judgment schema, ground truth + perfect oracle output,
+and quality scoring (field matchers + weights in the contract).
 
 Built-in contracts live under `workflows/`:
 
@@ -74,13 +79,20 @@ Clone `workflows/_template/` and `scenarios/_template/` for a new domain. Point
 `workflow_id` on a manifest entry at your contract. Design new workflows with
 [`/picsou-grill`](.cursor/skills/picsou-grill/SKILL.md) (Cursor skill).
 
+### What Picsou is not
+
+- Not a general agent loop / tool-calling benchmark
+- Not LMSYS / “best model overall”
+- Not a guarantee that enrichment always helps
+- Not unlimited workflow shape — see fit above
+
 ## How it works
 
 ```text
 frozen cases (+ optional Alien mirror packet)
         │
         ▼
- context pack (select → structure → compress → ground)
+ context pack (select → structure → compress → distract → ground)
         │
         ├─► Gemma 4 E2B (SLM under test)
         ├─► Ministral 3B / DeepSeek 1.5B (baselines)
@@ -93,16 +105,20 @@ frozen cases (+ optional Alien mirror packet)
    recommend: quality × cost × latency × tokens
 ```
 
-1. **Select** decision-bearing fields; drop noise.
-2. **Structure** a strict JSON triage task.
-3. **Distract** with traps (wrong geography, stale years, title bait).
-4. **Ground** every `evidence_quote` as an exact substring of source text.
-5. **Compare** Alien off vs on so you see whether extra context pays per token.
+1. **Select** — keep fields that change the decision; drop noise.
+2. **Structure** — addressable cases/sources (`source_id`).
+3. **Compress** — normalize claims into short decision-bearing text.
+4. **Distract** — inject traps (wrong geography, stale years, title bait).
+5. **Ground** — every `evidence_quote` must be an exact substring of frozen source
+   text (invented citations fail).
+6. **Compare** — Alien off vs on: does extra context pay per token?
 
-Offline demos use frozen Alien mirrors (not live MCP). Scores are for this
-contract: `1.0` = perfect triage on the frozen ground truth (oracle), not general
-intelligence. Fixture recommendations stay `demo-low`. Live repeats raise confidence
-to `low` / `medium` / `high` when quality is stable across trials.
+Offline demos freeze evidence packets; Alien-enriched packets are **mirrors**
+(`cases.json` vs `cases.alien.json`), not live MCP during scoring. Quality mixes
+priority accuracy, evidence exactness × signal F1, and attention-fit accuracy.
+`1.0` = **oracle** on that frozen ground truth — not general intelligence. Cells
+below the recommend floor (typically **0.75**) cannot win. Fixture confidence
+stays `demo-low` until live repeats raise it to `low` / `medium` / `high`.
 
 ## How to use
 
@@ -152,7 +168,7 @@ Example fixture summary (committed): [docs/demo/matrix-fixture-summary.json](doc
 Expected calibration line after `npm run evaluate:matrix`:
 
 ```text
-Calibration: oracle=1.000 | reference=grok-4.5 0.890–1.000 | winner=gemma-4-e2b-it 1.000–1.000 (confidence=demo-low, trials=1)
+Calibration: oracle=1.000 | reference=grok-4.5 0.890–1.000 | winner=gemma-4-e2b-it 1.000–1.000 (3 use cases) (confidence=demo-low, trials=1)
 ```
 
 On the three nightmare scenarios, Gemma without Alien often lands ~0.44–0.47;
@@ -173,7 +189,6 @@ Agent skills live under [`.cursor/skills/`](.cursor/skills/). Full map:
 | `/picsou-grill` | Wave interview → new workflow brief |
 | `/picsou-grill-auto` | Same brief; agent answers all waves |
 | `/picsou-readme` | Refresh README from method pillars |
-| `/picsou-method` | Alias of `/picsou-readme` |
 | `/picsou-eval-review` | Deep-dive eval methodology for a scenario |
 
 Typical path: grill → scaffold `scenarios/<id>/` → `/Picsou` → optional

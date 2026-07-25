@@ -11,7 +11,6 @@ Open the repo in Cursor and invoke them with `/skill-name` (or the aliases below
 | [`picsou-grill`](../.cursor/skills/picsou-grill/SKILL.md) | `/picsou-grill` | Wave interview to design a new Picsou-testable workflow (scenario brief) |
 | [`picsou-grill-auto`](../.cursor/skills/picsou-grill-auto/SKILL.md) | `/picsou-grill-auto` | Same brief as grill, but the agent answers all waves from chat context |
 | [`picsou-readme`](../.cursor/skills/picsou-readme/SKILL.md) | `/picsou-readme` | Refresh public README messaging from the method pillars |
-| [`picsou-method`](../.cursor/skills/picsou-method/SKILL.md) | `/picsou-method` | Legacy alias of `/picsou-readme` |
 | [`picsou-eval-review`](../.cursor/skills/picsou-eval-review/SKILL.md) | `/picsou-eval-review` | Deep-dive packing, scoring, Alien lift, and calibration for a scenario |
 
 ## Suggested flow
@@ -51,7 +50,6 @@ Open the repo in Cursor and invoke them with `/skill-name` (or the aliases below
   picsou-grill/SKILL.md
   picsou-grill-auto/SKILL.md
   picsou-readme/SKILL.md
-  picsou-method/SKILL.md          # alias → picsou-readme
   picsou-eval-review/SKILL.md
 ```
 
