@@ -1,0 +1,35 @@
+{
+  "scenario_id": "nightmare-icu-fork",
+  "note": "Grok-class external_control stays wrong even with Alien; Gemma+Alien is the thrifty winner.",
+  "mutations": {
+    "false": {
+      "slm_under_test": [
+        "set_high:peep-nonards-002",
+        "set_high:preprint-highpeep-005",
+        "set_medium:vap-peds-004",
+        "set_medium:mouse-biofilm-003"
+      ],
+      "larger_baseline": [
+        "set_high:peep-nonards-002",
+        "set_high:preprint-highpeep-005"
+      ],
+      "external_control": [
+        "set_high:peep-nonards-002",
+        "set_high:preprint-highpeep-005",
+        "set_high:vap-peds-004",
+        "set_medium:mouse-biofilm-003"
+      ]
+    },
+    "true": {
+      "slm_under_test": [],
+      "larger_baseline": [
+        "set_medium:peep-nonards-002"
+      ],
+      "external_control": [
+        "set_high:peep-nonards-002",
+        "set_medium:preprint-highpeep-005",
+        "set_medium:vap-peds-004"
+      ]
+    }
+  }
+}

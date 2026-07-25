@@ -1,0 +1,185 @@
+{
+  "workflow_version": "1.0.0",
+  "evidence_mode": "frozen_openaire_style",
+  "captured_at": "2026-07-25",
+  "provenance": {
+    "source": "OpenAIRE Graph API",
+    "note": "Harvested for Picsou; Alien MCP not connected in Cursor — same OpenAIRE substrate Alien Open Science MCP fronts.",
+    "harvested_dois": [
+      "10.5194/egusphere-egu26-15042"
+    ]
+  },
+  "researcher_profile": {
+    "role": "European Commission aide — nightmare heat brief",
+    "focus": [
+      "EU heat-mortality with numbers",
+      "NUTS-scale evidence",
+      "year>=2022"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "heat-nuts-real-001",
+      "record": {
+        "openaire_id": "doi_________::af0f99e7a68c31e2bb3de7424bf18613",
+        "title": "Evolution of Intense Heat Wave Hazard and Heat-Related Mortality in Europe",
+        "year": 2026,
+        "topics": [
+          "heatwave",
+          "mortality",
+          "Europe",
+          "NUTS"
+        ],
+        "access": "open",
+        "doi": "10.5194/egusphere-egu26-15042"
+      },
+      "sources": [
+        {
+          "source_id": "heat-nuts-001-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu26-15042",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Heat waves have emerged as a health hazard over Europe in recent decades with severe episodes of morbidity and mortality reported in the recent past during major heat waves. Several studies have investigated the temperature-mortality associations across Europe establishing the impact of rising temperature on increasing human health risk. In addition to these associations, the influence of changing characteristics (fr"
+        },
+        {
+          "source_id": "heat-nuts-001-quant",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu26-15042",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "OpenAIRE-normalized claim: intense heat-wave hazard evolution is linked to heat-related mortality patterns across Northern, Southern, Eastern and Western European regions using NUTS 3 mortality records."
+        },
+        {
+          "source_id": "heat-nuts-001-noise",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu26-15042",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Supplementary plotting used cartopy and matplotlib; ignore package lists for triage."
+        }
+      ]
+    },
+    {
+      "case_id": "us-phoenix-title-eu-002",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-phoenix-002",
+        "title": "European-style heat hospitalizations: Phoenix cooling-center utilization",
+        "year": 2024,
+        "topics": [
+          "heat",
+          "Europe-style",
+          "United States"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.phoenix.002"
+      },
+      "sources": [
+        {
+          "source_id": "phoenix-002-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.phoenix.002",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "In Maricopa County, Arizona, heatwave weeks raised heat-related hospitalizations by 18% among adults over 65. The phrase European-style refers only to cooling-center design, not to EU data. No EU transfer analysis is provided."
+        },
+        {
+          "source_id": "phoenix-002-bait",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.phoenix.002",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Title tokens Europe / European tempt HIGH; body geography is Arizona only."
+        }
+      ]
+    },
+    {
+      "case_id": "paris-no2-old-003",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-paris-003",
+        "title": "NO2 and emergency admissions in Greater Paris",
+        "year": 2019,
+        "topics": [
+          "NO2",
+          "Paris",
+          "Europe"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.paris.003"
+      },
+      "sources": [
+        {
+          "source_id": "paris-003-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.paris.003",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Using 2008-2014 monitor and hospital data for Greater Paris, short-term NO2 spikes raised respiratory emergency admissions by 4.1% among older adults."
+        },
+        {
+          "source_id": "paris-003-year",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.paris.003",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Publication year is 2019; sample ends 2014 — fails year>=2022 gate despite perfect topic fit."
+        }
+      ]
+    },
+    {
+      "case_id": "llm-climatebench-004",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-llm-004",
+        "title": "ClimateBench-LLM: transformers on European heatwave QA",
+        "year": 2025,
+        "topics": [
+          "LLM",
+          "climate",
+          "benchmark"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.llm.004"
+      },
+      "sources": [
+        {
+          "source_id": "llm-004-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.llm.004",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "ClimateBench-LLM scores instruction-tuned models on European heatwave question answering accuracy; it reports no epidemiological mortality estimates for ministries."
+        },
+        {
+          "source_id": "llm-004-bait",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.llm.004",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Training corpus mentions NUTS regions and 7% mortality tokens as text, not as study findings."
+        }
+      ]
+    },
+    {
+      "case_id": "heat-superseded-005",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-super-005",
+        "title": "Heatwave vulnerability index validated on mortality data in Europe (EGU abstract)",
+        "year": 2024,
+        "topics": [
+          "heatwave",
+          "vulnerability",
+          "Europe"
+        ],
+        "access": "open",
+        "doi": "10.5194/egusphere-egu24-1899"
+      },
+      "sources": [
+        {
+          "source_id": "super-005-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu24-1899",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "An EGU abstract proposes a heatwave social vulnerability index validated on mortality data in Europe; quantitative ministry-ready effect sizes are not reported in the packed abstract text."
+        },
+        {
+          "source_id": "super-005-bait",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu24-1899",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Title is highly relevant; without Alien lineage notes models over-promote to HIGH."
+        }
+      ]
+    }
+  ]
+}

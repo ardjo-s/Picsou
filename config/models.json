@@ -1,18 +1,38 @@
 {
   "verified_at": "2026-07-25",
-  "purpose": "Compare Gemma 4 E4B under engineered context against one larger baseline on the same frozen packet.",
+  "purpose": "Fast demo matrix: light Gemma 4 + Mistral + DeepSeek on Brev, with/without Alien.",
   "demo_candidates": [
     {
-      "id": "gemma-4-e4b-it",
+      "id": "gemma-4-e2b-it",
+      "api_id": "google/gemma-4-E2B-it",
       "role": "slm_under_test",
       "serving": "openai-compatible",
-      "notes": "Primary Gemma 4 edge/SLM candidate via SGLang, vLLM, or Ollama OpenAI API."
+      "endpoint_env": "PICSOU_ENDPOINT_GEMMA",
+      "notes": "Light Gemma 4 on Brev :30000. Override with PICSOU_GEMMA_E2B_MODEL."
     },
     {
-      "id": "gemma-4-26b-a4b-it",
+      "id": "ministral-3b-instruct",
+      "api_id": "mistralai/Ministral-3B-Instruct-2410",
       "role": "larger_baseline",
       "serving": "openai-compatible",
-      "notes": "Larger Gemma 4 MoE baseline for cost/latency/quality contrast."
+      "endpoint_env": "PICSOU_ENDPOINT_MISTRAL",
+      "notes": "Light Mistral-family baseline on Brev :30001."
+    },
+    {
+      "id": "deepseek-r1-distill-qwen-1.5b",
+      "api_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "role": "external_control",
+      "serving": "openai-compatible",
+      "endpoint_env": "PICSOU_ENDPOINT_DEEPSEEK",
+      "notes": "Light DeepSeek control on Brev :30002 (not Grok)."
+    },
+    {
+      "id": "grok-4.5",
+      "api_id": "grok-4.5",
+      "role": "external_control",
+      "serving": "openai-compatible",
+      "endpoint_env": "XAI_BASE_URL",
+      "notes": "Frontier control. Fixture profile intentionally fails nightmare gates even with Alien notes — shows packing > raw model size."
     }
   ],
   "discovery_contract": {

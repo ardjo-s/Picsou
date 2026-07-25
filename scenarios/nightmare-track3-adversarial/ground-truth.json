@@ -1,0 +1,44 @@
+{
+  "workflow_version": "1.0.0",
+  "cases": [
+    {
+      "case_id": "picsou-core-001",
+      "attention_fit": true,
+      "priority": "high",
+      "expected_signals": [
+        {
+          "source_id": "core-001-abstract",
+          "signal_type": "relevance_hook"
+        },
+        {
+          "source_id": "core-001-demo",
+          "signal_type": "method_signal"
+        }
+      ]
+    },
+    {
+      "case_id": "rag-halluc-paper-002",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "slm-arch-bench-003",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "omnichat-wrapper-004",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "edge-gemma-camera-005",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    }
+  ]
+}

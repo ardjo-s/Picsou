@@ -16,10 +16,17 @@ function signalKey(signal) {
   return `${signal.source_id}::${signal.signal_type}`;
 }
 
-export async function scoreDocument(output) {
-  const casesDocument = await readJson("workflow/cases.json");
-  const truthDocument = await readJson("workflow/ground-truth.json");
-  const benchmark = await readJson("workflow/benchmark.json");
+export async function scoreDocument(
+  output,
+  {
+    casesPath = "workflow/cases.json",
+    truthPath = "workflow/ground-truth.json",
+    benchmarkPath = "workflow/benchmark.json",
+  } = {},
+) {
+  const casesDocument = await readJson(casesPath);
+  const truthDocument = await readJson(truthPath);
+  const benchmark = await readJson(benchmarkPath);
   const cases = new Map(casesDocument.cases.map((item) => [item.case_id, item]));
   const truth = new Map(truthDocument.cases.map((item) => [item.case_id, item]));
   const errors = [];

@@ -1,0 +1,44 @@
+{
+  "workflow_version": "1.0.0",
+  "cases": [
+    {
+      "case_id": "ards-ltv-timing-001",
+      "attention_fit": true,
+      "priority": "high",
+      "expected_signals": [
+        {
+          "source_id": "ards-001-abstract",
+          "signal_type": "relevance_hook"
+        },
+        {
+          "source_id": "ards-001-endpoint",
+          "signal_type": "impact_claim"
+        }
+      ]
+    },
+    {
+      "case_id": "peep-nonards-002",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "mouse-biofilm-003",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "vap-peds-004",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "preprint-highpeep-005",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    }
+  ]
+}

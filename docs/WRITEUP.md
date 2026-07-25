@@ -1,73 +1,77 @@
-# Picsou Router: thrifty science attention with Gemma 4 E4B
+# Picsou Router: thrifty attention routing with Gemma 4 E2B
 
 **Track:** Context Engineering for SLMs  
 **Hackathon:** [Paris Gemma 4 Hackathon](https://www.kaggle.com/competitions/paris-gemma-4-hackathon)
 
 ## Problem
 
-Policy analysts drown in open research. The costly mistake is not “missing a
-transformer paper”—it is spending attention on the wrong paper. Large models
-can triage, but they are slow and expensive to run for every alert. Small
-models fail when the context is messy.
+Analysts drown in open research and noisy lead feeds. The costly mistake is not
+missing a paper—it is spending attention on the wrong one. Large models triage
+well but are slow and expensive. Small models fail when context is messy.
 
 ## Solution
 
-Picsou packs frozen OpenAIRE-style evidence, asks Gemma 4 E4B to triage the
-same cases as a larger Gemma baseline, then scores both deterministically.
-The product is not another chat UI. It is a **context contract** that makes
-the small model enough: select, structure, compress, and force exact-evidence
-citations.
+Picsou is a **context contract** plus eval harness: select, structure,
+compress, add distractors, and force exact-evidence citations. Gemma 4 E2B
+(`gemma-4-e2b-it`) is the SLM under test. Light baselines (Ministral 3B,
+DeepSeek 1.5B distill) run on the same packed packet. An Alien axis compares
+frozen baseline packets against Alien-enriched mirrors.
+
+The product is not another chat UI. It answers: *which small model is enough,
+and does Alien context pay for itself in quality per token?*
 
 ## How Gemma 4 is used
 
-Gemma 4 is load-bearing. `gemma-4-e4b-it` is the SLM under test. A larger
-Gemma 4 MoE candidate (`gemma-4-26b-a4b-it`) is the baseline. Both receive the
-identical packed packet through an OpenAI-compatible endpoint (SGLang, vLLM,
-or Ollama). Outputs must match a strict JSON schema. Quotes must be exact
-substrings of frozen source text. Invented citations fail.
+Gemma 4 E2B receives identical packed packets through OpenAI-compatible
+endpoints (SGLang on NVIDIA Brev in our live setup). Outputs must match a
+strict JSON schema. Quotes must be exact substrings of source text. Invented
+citations fail scoring.
+
+Matrix mode runs three nightmare use cases (heat lineage, ICU fork, Track 3
+adversarial): 4 models × Alien on/off = 24 fixture cells judges can reproduce
+without a GPU.
 
 ## Architecture and process
 
-1. Freeze five research cases with fit and distractor snippets.
+1. Freeze cases per scenario with fit labels and distractor snippets.
 2. Pack only decision-bearing fields into the model message.
-3. Run Gemma 4 E4B and the baseline on the same packet.
-4. Score priority accuracy, attention-fit accuracy, signal F1, and evidence
-   exactness.
-5. Recommend with a composite of quality, estimated cost, and latency.
+3. Run Gemma E2B and baselines on the same packet (fixture or live).
+4. Score priority accuracy, attention-fit accuracy, signal F1, evidence
+   exactness, plus token/cost/latency efficiency.
+5. Recommend with a composite score per use case.
 
-Judges can reproduce the offline path with no GPU:
+Judges reproduce offline:
 
 ```bash
 npm test
 npm run evaluate:fixture
+npm run evaluate:matrix
 ```
 
-Live path:
+Live matrix (optional):
 
 ```bash
-export OPENAI_BASE_URL=http://127.0.0.1:30000/v1
-export OPENAI_API_KEY=EMPTY
-npm run evaluate
+export PICSOU_ENDPOINT_GEMMA=http://127.0.0.1:30000/v1
+export PICSOU_ENDPOINT_MISTRAL=http://127.0.0.1:30001/v1
+export PICSOU_ENDPOINT_DEEPSEEK=http://127.0.0.1:30002/v1
+npm run evaluate:matrix:live
 ```
 
 ## Challenges and choices
 
-- **Fair comparison:** live web search would destroy parity. We froze evidence.
+- **Fair comparison:** live web search would destroy parity; we freeze evidence.
 - **Hallucination control:** exact-quote scoring over free-form summaries.
-- **Track fit:** the innovation is packing, not fine-tuning weights in an
-  eight-hour sprint.
-- **Honest confidence:** recommendations are labeled `demo-low` (five cases,
-  one trial).
+- **Track fit:** innovation is packing and eval, not fine-tuning in a sprint.
+- **Honest confidence:** recommendations are labeled `demo-low`.
 
 ## Impact
 
-A climate/air-quality analyst gets a thrifty router: keep high-signal European
-heat and pollution papers, skim adjacent grid-PV work, skip pure LLM benchmarks
-and crypto-mining profitability studies. Context engineering turns Gemma 4 E4B
-into a practical filter instead of a fragile chatbot.
+A policy analyst, consultant, or jury member gets a thrifty router: keep
+high-signal items, skim adjacent work, skip traps. Context engineering turns
+Gemma 4 E2B into a practical filter instead of a fragile chatbot.
 
 ## Links
 
 - Public repo: attach GitHub URL in the Kaggle Writeup attachments
-- Demo: `npm run evaluate:fixture` or a live SGLang Gemma endpoint
+- Demo: `npm run evaluate:matrix` (fixture) or live Brev endpoints
 - Competition: https://www.kaggle.com/competitions/paris-gemma-4-hackathon

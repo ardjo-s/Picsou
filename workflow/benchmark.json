@@ -16,11 +16,17 @@
       "attention_fit_accuracy": 0.15
     },
     "recommendation_components": {
-      "quality": 0.65,
+      "quality": 0.55,
       "cost_efficiency": 0.2,
-      "latency_efficiency": 0.15
+      "latency_efficiency": 0.15,
+      "token_efficiency": 0.1
     },
     "minimum_quality_to_recommend": 0.75,
-    "tie_break_order": ["quality", "estimated_cost_usd", "latency_ms"]
+    "tie_break_order": [
+      "quality",
+      "total_tokens",
+      "estimated_cost_usd",
+      "latency_ms"
+    ]
   }
 }

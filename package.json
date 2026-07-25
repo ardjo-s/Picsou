@@ -2,14 +2,17 @@
   "name": "picsou-router",
   "version": "1.0.0",
   "private": true,
-  "description": "Picsou Router — evaluate whether Gemma 4 E4B is enough for a frozen OpenAIRE attention-routing workflow.",
+  "description": "Picsou Router — Gemma 4 context-engineering eval matrix (Paris Gemma 4 Track 3).",
   "type": "module",
   "scripts": {
     "score": "node scripts/score.mjs",
     "validate": "node scripts/validate-repo.mjs",
     "test": "node --test test/*.test.mjs && node scripts/validate-repo.mjs",
     "evaluate": "node src/cli.mjs",
-    "evaluate:fixture": "node src/cli.mjs --fixture"
+    "evaluate:fixture": "node src/cli.mjs --fixture",
+    "evaluate:matrix": "node src/cli.mjs --matrix --fixture",
+    "evaluate:matrix:live": "node src/cli.mjs --matrix",
+    "canvas:report": "node scripts/render-canvas-report.mjs"
   },
   "engines": {
     "node": ">=20"
