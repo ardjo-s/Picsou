@@ -11,5 +11,11 @@ __pycache__/
 .brev-setup-agent.log
 docs/reports/
 local/
-.cursor/
+
+# Cursor project noise; publish agent skills + rules
+.cursor/*
+!.cursor/skills/
+!.cursor/skills/**/
+!.cursor/rules/
+!.cursor/rules/**/
 
