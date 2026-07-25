@@ -22,7 +22,7 @@ per use case.
 | Gemma Integration (30) | `config/models.json` (Gemma 4 E2B SLM), `docs/WRITEUP.md` § How Gemma 4 is used, optional Brev live path in README |
 | Innovation & Impact (30) | Nightmare scenarios in `scenarios/manifest.json`, Alien on/off matrix, per-use-case valence recos in `results/latest-matrix.json` |
 | Functionality (20) | `npm test` + `npm run evaluate:matrix` (offline, no GPU), [docs/demo/JURY-DEMO.md](docs/demo/JURY-DEMO.md) |
-| Presentation & Writeup (20) | [docs/WRITEUP.md](docs/WRITEUP.md), [docs/SCORE-GUIDE.md](docs/SCORE-GUIDE.md), [docs/PITCH-KIT.md](docs/PITCH-KIT.md), optional `/Picsou` canvas reports |
+| Presentation & Writeup (20) | [docs/WRITEUP.md](docs/WRITEUP.md), [docs/SCORE-GUIDE.md](docs/SCORE-GUIDE.md), optional `/Picsou` canvas reports |
 
 ## Why this can win
 

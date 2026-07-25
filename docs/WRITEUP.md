@@ -68,9 +68,9 @@ npm run evaluate:matrix:live
 ## Demo (no login, no GPU)
 
 Clone https://github.com/ardjo-s/Picsou and run `npm run evaluate:matrix`.
-Full instructions: `docs/demo/JURY-DEMO.md`. Pitch script + Q&A: `docs/PITCH-KIT.md`.
-Optional Cursor pitch: `/Picsou` opens per-use-case canvas reports with prompts,
-tokens, and calibration graphs (Cursor only; CLI stays the jury path).
+Full instructions: `docs/demo/JURY-DEMO.md`. Optional Cursor pitch: `/Picsou`
+opens per-use-case canvas reports with prompts, tokens, and calibration graphs
+(Cursor only; CLI stays the jury path).
 
 ## Challenges and choices
 
