@@ -6,6 +6,49 @@ Picsou packs a frozen evidence packet, runs the same triage task on **Gemma 4 E2
 and light baselines (with or without Alien-enriched context), scores exact-quote
 JSON outputs, and recommends the cheapest model that still hits quality.
 
+## Why Picsou
+
+### The problem
+
+Knowledge workers do not fail because they lack documents. They fail because they
+**spend attention on the wrong ones**.
+
+- A policy aide skims 40 papers and misses the only EU-scoped mortality study.
+- A clinician sees conflicting ICU protocols and escalates the outdated fork.
+- A founder scores “hot” leads that are academic noise with zero buying intent.
+
+Frontier models can triage this well — at **latency and token cost** that do not
+scale to every inbox, every briefing, every night batch. Raw small models are
+cheap but fragile: they chase title bait, wrong geography, and stale years.
+
+Extra context (RAG, Alien enrichment, longer packs) is sold as free quality.
+Often it is not free: more tokens, more noise, unclear lift.
+
+### Who it is for
+
+| User | Job to be done |
+| --- | --- |
+| Policy / research aide | Keep high-signal papers, skip traps, brief leadership fast |
+| Clinician / medical analyst | Separate protocol that changes care from adjacent noise |
+| B2B founder / RevOps | Rank leads by real commercial fit, not keyword glitter |
+| AI product / ops lead | Know which SLM is *enough* for a workflow before paying frontier rates |
+
+### User value
+
+Picsou is not another chatbot. It is a **thrift router for attention**:
+
+1. **Protect attention** — structured triage with exact-quote evidence, so “read this”
+   is grounded in source text, not vibes.
+2. **Spend less for the same decision quality** — measure when Gemma 4 E2B + packed
+   context matches a frontier reference ceiling at a fraction of the cost.
+3. **Know if richer context pays** — Alien on/off on the same task answers
+   “does this enrichment buy quality worth the tokens?” before you ship it.
+4. **Decide with a contract, not a demo vibe** — offline, reproducible matrix:
+   quality × cost × latency × tokens → one recommendation per use case.
+
+**Bottom line:** keep expensive models for the hard cases; run thrifty SLMs on
+packed context for the rest — and prove the tradeoff with numbers.
+
 ## How it works
 
 ```text
