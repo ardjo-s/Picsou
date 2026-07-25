@@ -123,11 +123,8 @@ const SHARED_UI = `
 const HELP = {
   picsou:
     "Picsou compare de petits modèles d'IA sur des devoirs difficiles. Il dit si un petit modèle suffit quand les notes sont bien emballées.",
-  hover_i:
-    "Survole ou clique un i : la légende s'affiche dans le bandeau jaune/bleu en haut (le title HTML natif ne marche pas dans Cursor).",
   use_case:
     "Un cas d'usage = un seul job (une histoire). On ne mélange jamais les scores entre jobs.",
-  hard: "HARD = le devoir contient des pièges exprès.",
   nightmare:
     "NIGHTMARE = même un gros modèle peut rater sans de bonnes notes Alien.",
   actor: "Qui a besoin de la réponse (aide ministre, médecin, jury…).",
@@ -194,14 +191,7 @@ const HELP = {
 /** Shared legend state keys — Cursor canvas does not show native HTML title tooltips. */
 function LegendBanner() {
   const [legend] = useCanvasState<string | null>("legendText", null);
-  if (!legend) {
-    return (
-      <Callout tone="neutral" title="Infobulles">
-        Survole ou clique un <Text weight="semibold">i</Text> — la légende
-        apparaît ici (pas de tooltip système dans Cursor).
-      </Callout>
-    );
-  }
+  if (!legend) return null;
   return (
     <Callout tone="info" title="Légende">
       <Text style={{ lineHeight: 1.5 }}>{legend}</Text>
@@ -509,12 +499,7 @@ export default function PicsouUseCaseCanvas() {
         subtitle={\`Picsou report · \${UC.track} · \${UC.mode} · \${UC.generated_at}\`}
         pills={
           <>
-            {UC.hard ? (
-              <Row gap={4} style={{ alignItems: "center" }}>
-                <Pill>HARD</Pill>
-                <InfoTip text={HELP.hard} />
-              </Row>
-            ) : null}
+            {UC.hard ? <Pill>HARD</Pill> : null}
             {UC.nightmare ? (
               <Row gap={4} style={{ alignItems: "center" }}>
                 <Pill>NIGHTMARE</Pill>
@@ -533,14 +518,6 @@ export default function PicsouUseCaseCanvas() {
       />
 
       <LegendBanner />
-
-      <Callout tone="info" title="Comment lire ce report">
-        <Text style={{ lineHeight: 1.5 }}>
-          Survole ou clique un <Text weight="semibold">i</Text> — la légende
-          s'affiche dans le bandeau juste au-dessus. Haut = ce qu'on a testé.
-          Milieu = qui gagne. Bas = graphiques.
-        </Text>
-      </Callout>
 
       {wf ? (
         <Card>
@@ -1159,20 +1136,11 @@ export default function PicsouIndexCanvas() {
           <>
             <Pill>{INDEX.track}</Pill>
             <Pill>{INDEX.mode}</Pill>
-            <InfoTip text={HELP.hover_i} />
           </>
         }
       />
 
       <LegendBanner />
-
-      <Callout tone="info" title="Comment lire Picsou">
-        <Text style={{ lineHeight: 1.5 }}>
-          Survole ou clique un <Text weight="semibold">i</Text> — la légende
-          s'affiche dans le bandeau au-dessus. Ouvre un canvas use-case pour
-          les graphes. Déplie les prompts pour le texte entier.
-        </Text>
-      </Callout>
 
       <Card>
         <CardTitle title="Recommendations" help={HELP.index} />
@@ -1242,7 +1210,6 @@ export default function PicsouIndexCanvas() {
               {uc.title}
             </Text>
             <InfoTip text={HELP.use_case} />
-            {uc.hard ? <InfoTip text={HELP.hard} /> : null}
             {uc.nightmare ? <InfoTip text={HELP.nightmare} /> : null}
           </Row>
           {uc.prompt_system ? (
