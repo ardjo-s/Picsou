@@ -4,7 +4,7 @@ Deadline: **Jul 25, 2026 18:00 GMT+2**
 
 ## Checklist
 
-1. [ ] Merge PR(s) to `main` on https://github.com/ardjo-s/Picsou
+1. [x] Merge PR(s) to `main` on https://github.com/ardjo-s/Picsou — done (PR #3 + #4, Jul 25)
 2. [ ] Open https://www.kaggle.com/competitions/paris-gemma-4-hackathon/writeups
 3. [ ] Click **New Writeup**
 4. [ ] Paste content from `docs/WRITEUP.md` (under 1500 words)

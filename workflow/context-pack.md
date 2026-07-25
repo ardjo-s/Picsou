@@ -1,7 +1,7 @@
 # Context pack (Track 3 — Context Engineering for SLMs)
 
 Picsou does not ask Gemma to browse the open web. It feeds a **packed**
-evidence packet so a small model (Gemma 4 E4B) can triage research attention
+evidence packet so a small model (Gemma 4 E2B) can triage research attention
 reliably.
 
 ## Packing steps
@@ -16,5 +16,5 @@ reliably.
 ## Why this is the product
 
 Without packing, an SLM either hallucinates relevance or misses policy hooks.
-With packing + deterministic scoring, judges can see whether Gemma 4 E4B is
-*enough* versus a larger baseline on quality, latency, and estimated cost.
+With packing + deterministic scoring, judges can see whether Gemma 4 E2B is
+*enough* versus light baselines on quality, latency, and estimated cost.
