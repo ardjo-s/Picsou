@@ -1,65 +1,61 @@
 # Picsou Router
 
-**Paris Gemma 4 Hackathon · Track 3 — Context Engineering for SLMs**
+Thrifty attention routing for small language models.
 
-Picsou packs frozen evidence packets, runs triage on **Gemma 4 E2B** plus light
-baselines (Ministral, DeepSeek), scores outputs deterministically, and
-recommends the cheapest model that still hits quality — with or without Alien
-context.
+Picsou packs a frozen evidence packet, runs the same triage task on **Gemma 4 E2B**
+and light baselines (with or without Alien-enriched context), scores exact-quote
+JSON outputs, and recommends the cheapest model that still hits quality.
 
-> Empty or undocumented repos are ineligible. This repository is the public
-> code + clonable offline demo judges can run without a GPU.
+## How it works
 
-## One-liner
+```text
+frozen cases (+ optional Alien mirror packet)
+        │
+        ▼
+ context pack (select → structure → compress → ground)
+        │
+        ├─► Gemma 4 E2B (SLM under test)
+        ├─► Ministral 3B / DeepSeek 1.5B (baselines)
+        └─► Grok 4.5 (reference ceiling in reports)
+                │
+                ▼
+        deterministic scorer (exact evidence quotes)
+                │
+                ▼
+   recommend: quality × cost × latency × tokens
+```
 
-Pack context → matrix eval (model × Alien) → one evidence-backed recommendation
-per use case.
+1. **Select** decision-bearing fields; drop noise.
+2. **Structure** a strict JSON triage task.
+3. **Distract** with traps (wrong geography, stale years, title bait).
+4. **Ground** every `evidence_quote` as an exact substring of source text.
+5. **Compare** Alien off vs on so you see whether extra context pays per token.
 
-## Rubric coverage (Paris Gemma 4 Hackathon)
+Offline demos use frozen Alien mirrors (not live MCP). Scores are for this
+contract: `1.0` = perfect triage on the frozen ground truth (oracle), not general
+intelligence. Fixture recommendations are labeled `demo-low` until live trials repeat.
 
-| Criterion (pts) | Artifact judges open in &lt;2 min |
-| --- | --- |
-| Gemma Integration (30) | `config/models.json` (Gemma 4 E2B SLM), `docs/WRITEUP.md` § How Gemma 4 is used, optional Brev live path in README |
-| Innovation & Impact (30) | Nightmare scenarios in `scenarios/manifest.json`, Alien on/off matrix, per-use-case valence recos in `results/latest-matrix.json` |
-| Functionality (20) | `npm test` + `npm run evaluate:matrix` (offline, no GPU), [docs/demo/JURY-DEMO.md](docs/demo/JURY-DEMO.md) |
-| Presentation & Writeup (20) | [docs/WRITEUP.md](docs/WRITEUP.md), [docs/SCORE-GUIDE.md](docs/SCORE-GUIDE.md), optional `/Picsou` canvas reports |
-
-## Why this can win
-
-| Rubric (100) | How Picsou hits it |
-| --- | --- |
-| Gemma Integration (30) | Gemma 4 E2B is the SLM under test on every scenario |
-| Innovation & Impact (30) | Attention thrift across science, B2B, clinical, jury traps |
-| Functionality (20) | `npm test` + `npm run evaluate:fixture` works offline |
-| Presentation (20) | `docs/WRITEUP.md` (<1500 words) + optional Cursor canvas |
-
-## Quick start (judges)
+## How to use
 
 Requires Node.js 20+. No API key for the offline demo.
 
 ```bash
+git clone https://github.com/ardjo-s/Picsou.git
+cd Picsou
 npm test
-npm run score -- examples/perfect-output.json
-npm run evaluate:fixture
 npm run evaluate:matrix
-npm run evaluate:matrix -- --trials 3
 ```
 
-Expected perfect fixture quality score: `1.0`. See [docs/SCORE-GUIDE.md](docs/SCORE-GUIDE.md)
-for what the score means (oracle = 1.0, reference model, repeated trials).
-Matrix fixture runs 3 nightmare scenarios × 4 models × Alien on/off (24 cells).
-
-## Live eval (optional)
-
-**Classic** (single frozen workflow, one endpoint):
+Useful commands:
 
 ```bash
-export OPENAI_BASE_URL=http://127.0.0.1:30000/v1
-export OPENAI_API_KEY=EMPTY
-npm run evaluate
+npm run score -- examples/perfect-output.json   # oracle path → quality 1.0
+npm run evaluate:fixture                        # legacy single workflow
+npm run evaluate:matrix                         # 3 scenarios × 4 models × Alien on/off
+npm run evaluate:matrix -- --trials 3           # repeat cells for variance
 ```
 
-**Matrix** (Brev trio on separate ports):
+Optional live OpenAI-compatible endpoints (SGLang / Brev):
 
 ```bash
 export PICSOU_ENDPOINT_GEMMA=http://127.0.0.1:30000/v1
@@ -69,42 +65,40 @@ export OPENAI_API_KEY=EMPTY
 npm run evaluate:matrix:live
 ```
 
-Configured candidates in `config/models.json`:
+Models in `config/models.json`: `gemma-4-e2b-it`, `ministral-3b-instruct`,
+`deepseek-r1-distill-qwen-1.5b`, `grok-4.5`.
 
-- `gemma-4-e2b-it` — SLM under test (Gemma 4)
-- `ministral-3b-instruct` — light baseline
-- `deepseek-r1-distill-qwen-1.5b` — external control on Brev
-- `grok-4.5` — frontier control (optional live via xAI)
+## Demo examples
 
-Optional Cursor canvas graphs: add `--canvas` to any CLI run (off by default).
+Step-by-step offline demo: [docs/demo/README.md](docs/demo/README.md)
+
+Example fixture summary (committed): [docs/demo/matrix-fixture-summary.json](docs/demo/matrix-fixture-summary.json)
+
+Expected calibration line after `npm run evaluate:matrix`:
+
+```text
+Calibration: oracle=1.000 | reference=grok-4.5 0.890–1.000 | winner=gemma-4-e2b-it 1.000–1.000 (confidence=demo-low, trials=1)
+```
+
+On the three nightmare scenarios, Gemma without Alien often lands ~0.44–0.47;
+with Alien it reaches **1.00** — matching the Grok reference ceiling at much
+lower estimated cost.
+
+Nightmare packs live under `scenarios/nightmare-*` (heat lineage, ICU protocol
+fork, Track 3 adversarial traps).
 
 ## Layout
 
 ```text
-workflow/     legacy single-demo benchmark (jury quick path)
-scenarios/    matrix v2 use cases (manifest.json)
-config/       model candidates + dated pricing estimates
-src/          packer, evaluator, matrix orchestration
-scripts/      score, validate, canvas render
-examples/     perfect fixture for legacy workflow
-docs/         Kaggle writeup draft + architecture
-test/         node:test coverage
+config/      model candidates + pricing estimates
+scenarios/  matrix use cases (manifest.json)
+src/        packer, matrix eval, scoring helpers
+scripts/    score + repo contract checks
+examples/   perfect fixture output
+docs/demo/  how to run the offline demo + sample report
+workflow/   legacy single-benchmark contract
+test/       node:test coverage
 ```
-
-## Submission checklist
-
-1. Public GitHub repo: https://github.com/ardjo-s/Picsou — no login wall
-2. Kaggle Writeup from `docs/WRITEUP.md` (submit before deadline) — see `docs/KAGGLE-SUBMIT.md`
-3. Demo attachment: [docs/demo/JURY-DEMO.md](docs/demo/JURY-DEMO.md) + `npm run evaluate:matrix` output
-4. State the track: **Context Engineering for SLMs**
-
-Writeup URL to create:  
-https://www.kaggle.com/competitions/paris-gemma-4-hackathon/writeups
-
-## Accuracy boundary
-
-Frozen demo corpus. Alien packets are frozen mirrors in fixture mode, not live
-MCP. Recommendation confidence is always `demo-low` until trials repeat.
 
 ## License
 

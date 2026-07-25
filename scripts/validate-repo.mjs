@@ -8,10 +8,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
   "README.md",
   "LICENSE",
-  "docs/WRITEUP.md",
-  "docs/ARCHITECTURE.md",
-  "docs/SCORE-GUIDE.md",
-  "docs/demo/JURY-DEMO.md",
+  "docs/demo/README.md",
+  "docs/demo/matrix-fixture-summary.json",
   "workflow/prompt.md",
   "workflow/context-pack.md",
   "workflow/cases.json",
@@ -46,40 +44,22 @@ const pricing = JSON.parse(
 const ledger = JSON.parse(
   await fs.readFile(path.join(ROOT, "workflow/source-ledger.json"), "utf8"),
 );
-const writeup = await fs.readFile(path.join(ROOT, "docs/WRITEUP.md"), "utf8");
-const words = writeup.trim().split(/\s+/).filter(Boolean).length;
 const readme = await fs.readFile(path.join(ROOT, "README.md"), "utf8");
-const skill = await fs.readFile(
-  path.join(ROOT, ".cursor/skills/picsou/SKILL.md"),
-  "utf8",
-);
-const architecture = await fs.readFile(
-  path.join(ROOT, "docs/ARCHITECTURE.md"),
-  "utf8",
-);
+const demo = await fs.readFile(path.join(ROOT, "docs/demo/README.md"), "utf8");
 
-assert.ok(words <= 1500, `WRITEUP.md is ${words} words; must stay under 1500.`);
-assert.ok(
-  /Context Engineering for SLMs/i.test(writeup),
-  "WRITEUP must name Track 3 (Context Engineering for SLMs).",
-);
-assert.ok(/Gemma/i.test(writeup), "WRITEUP must mention Gemma.");
 assert.ok(
   readme.includes("npm run evaluate:matrix"),
   "README must document offline matrix quick start.",
 );
 assert.ok(
-  readme.includes("Rubric coverage") || readme.includes("Why this can win"),
-  "README must map hackathon rubric to artifacts.",
+  /How it works/i.test(readme) && /How to use/i.test(readme),
+  "README must explain how Picsou works and how to use it.",
 );
 assert.ok(
-  !/E4B \(SLM under test\)/i.test(architecture),
-  "ARCHITECTURE must not reference stale E4B as SLM under test.",
+  demo.includes("npm run evaluate:matrix"),
+  "Demo doc must document the offline matrix path.",
 );
-assert.ok(
-  skill.includes("fixture") && skill.includes("--canvas"),
-  "Picsou skill must document fixture-first jury path and canvas demo.",
-);
+
 assert.equal(cases.cases.length, 5);
 assert.equal(cases.evidence_mode, "frozen_openaire_style");
 assert.equal(cases.workflow_version, ledger.workflow_version);
@@ -87,9 +67,6 @@ assert.deepEqual(
   truth.cases.map((item) => item.case_id),
   cases.cases.map((item) => item.case_id),
 );
-
-const scoreGuide = await fs.readFile(path.join(ROOT, "docs/SCORE-GUIDE.md"), "utf8");
-assert.ok(scoreGuide.includes("1.0 = oracle"), "SCORE-GUIDE must define the oracle ceiling.");
 
 const manifest = JSON.parse(
   await fs.readFile(path.join(ROOT, "scenarios/manifest.json"), "utf8"),
@@ -172,5 +149,5 @@ assert.equal(perfect.schema_valid, true, perfect.errors.join("\n"));
 assert.ok(Math.abs(perfect.quality_score - 1) < 1e-9, `Expected quality 1, got ${perfect.quality_score}`);
 
 console.log(
-  `Repository contract valid. Perfect fixture score: ${perfect.quality_score.toFixed(4)}. Writeup words: ${words}.`,
+  `Repository contract valid. Perfect fixture score: ${perfect.quality_score.toFixed(4)}.`,
 );

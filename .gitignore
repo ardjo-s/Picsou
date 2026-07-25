@@ -10,3 +10,6 @@ __pycache__/
 .env.local
 .brev-setup-agent.log
 docs/reports/
+local/
+.cursor/
+
