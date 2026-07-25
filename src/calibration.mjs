@@ -157,12 +157,18 @@ export function formatCalibrationSummary(report) {
       .filter(Boolean);
     const refModel =
       report.scenarios[0]?.calibration?.reference_model?.model_id ?? "n/a";
+    // Range across all completed reference-model cells (Alien on/off), not only best.
     const refScores = report.scenarios
-      .map(
-        (scenario) =>
-          scenario.calibration?.reference_model?.best_cell?.quality_score,
-      )
-      .filter(Number.isFinite);
+      .flatMap((scenario) =>
+        (scenario.cells || [])
+          .filter(
+            (cell) =>
+              cell.status === "completed" &&
+              cell.model === refModel &&
+              Number.isFinite(cell.score?.quality_score),
+          )
+          .map((cell) => cell.score.quality_score),
+      );
     const winScores = winners
       .map((winner) => winner.quality_score)
       .filter(Number.isFinite);

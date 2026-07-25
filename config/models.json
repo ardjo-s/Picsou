@@ -32,7 +32,7 @@
       "role": "reference_ceiling",
       "serving": "openai-compatible",
       "endpoint_env": "XAI_BASE_URL",
-      "notes": "Empirical ceiling reference in matrix reports. Fixture profile may still fail nightmare gates to show packing > raw model size."
+      "notes": "Demo reference_ceiling (market frontier on triage + cost). Fixture profile keeps Grok near oracle on packed packets; Gemma+Alien matches that quality at thrift cost. Market: AA Index #4 / 54; not hallucination leader. See docs/DEMO-REFERENCE-GROK.md."
     }
   ],
   "discovery_contract": {
