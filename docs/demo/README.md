@@ -44,6 +44,7 @@ Committed sample: [matrix-fixture-summary.json](./matrix-fixture-summary.json)
 - **Below 1.0** = partial correctness on this benchmark only
 - Recommendations need quality ≥ 0.75 before they can win
 - Fixture confidence stays `demo-low` (single trial / frozen corpus)
+- Live ladder: `low` (≥2 trials), `medium` (≥5 + stable), `high` (≥10 + stable) — see [LIVE.md](./LIVE.md)
 
 ## Optional
 

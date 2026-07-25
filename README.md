@@ -76,7 +76,8 @@ frozen cases (+ optional Alien mirror packet)
 
 Offline demos use frozen Alien mirrors (not live MCP). Scores are for this
 contract: `1.0` = perfect triage on the frozen ground truth (oracle), not general
-intelligence. Fixture recommendations are labeled `demo-low` until live trials repeat.
+intelligence. Fixture recommendations stay `demo-low`. Live repeats raise confidence
+to `low` / `medium` / `high` when quality is stable across trials.
 
 ## How to use
 

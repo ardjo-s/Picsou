@@ -74,6 +74,15 @@ Writeup one-liner: *Live Gemma 4 E2B smoke tested via SGLang on NVIDIA Brev; Ali
 Live reports set `mode: "live"` and still list:
 
 - Alien packets = frozen mirrors (not live MCP)
-- Confidence stays `demo-low` until you repeat with `--trials N`
+- Confidence ladder (fixture always `demo-low`):
+  - `low` — live, `--trials` ≥ 2, winner quality stdev ≤ 0.05
+  - `medium` — live, ≥ 5 trials, all cells completed, stdev ≤ 0.03
+  - `high` — live, ≥ 10 trials, all cells completed, stdev ≤ 0.02
+
+Example for stronger confidence:
+
+```bash
+npm run evaluate:matrix:live -- --trials 10
+```
 
 Committed fixture numbers for the writeup remain in [matrix-fixture-summary.json](./matrix-fixture-summary.json).

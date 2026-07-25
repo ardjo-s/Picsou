@@ -36,11 +36,59 @@ test("deriveConfidence stays demo-low for fixture", () => {
   assert.equal(
     deriveConfidence({
       fixture: true,
-      trialsRequested: 5,
+      trialsRequested: 10,
       winnerQualityStdev: 0.01,
       allCellsCompleted: true,
     }),
     "demo-low",
+  );
+});
+
+test("deriveConfidence ladder for live runs", () => {
+  assert.equal(
+    deriveConfidence({
+      fixture: false,
+      trialsRequested: 1,
+      winnerQualityStdev: 0.01,
+      allCellsCompleted: true,
+    }),
+    "demo-low",
+  );
+  assert.equal(
+    deriveConfidence({
+      fixture: false,
+      trialsRequested: 2,
+      winnerQualityStdev: 0.04,
+      allCellsCompleted: true,
+    }),
+    "low",
+  );
+  assert.equal(
+    deriveConfidence({
+      fixture: false,
+      trialsRequested: 5,
+      winnerQualityStdev: 0.025,
+      allCellsCompleted: true,
+    }),
+    "medium",
+  );
+  assert.equal(
+    deriveConfidence({
+      fixture: false,
+      trialsRequested: 10,
+      winnerQualityStdev: 0.015,
+      allCellsCompleted: true,
+    }),
+    "high",
+  );
+  assert.equal(
+    deriveConfidence({
+      fixture: false,
+      trialsRequested: 10,
+      winnerQualityStdev: 0.015,
+      allCellsCompleted: false,
+    }),
+    "low",
   );
 });
 
