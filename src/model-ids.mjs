@@ -18,7 +18,7 @@ export function candidateApiId(model) {
     return process.env.PICSOU_GEMMA_BASELINE_MODEL;
   }
   if (
-    (model?.role === "external_control" || model?.id?.includes("grok")) &&
+    (model?.role === "reference_ceiling" || model?.id?.includes("grok")) &&
     process.env.PICSOU_GROK_MODEL
   ) {
     return process.env.PICSOU_GROK_MODEL;

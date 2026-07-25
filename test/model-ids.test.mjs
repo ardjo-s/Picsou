@@ -24,6 +24,32 @@ test("candidateApiId prefers api_id then env override for SLM", () => {
   }
 });
 
+test("PICSOU_GROK_MODEL does not override DeepSeek external_control", () => {
+  const prev = process.env.PICSOU_GROK_MODEL;
+  process.env.PICSOU_GROK_MODEL = "cursor-grok-4.5-high";
+  try {
+    assert.equal(
+      candidateApiId({
+        id: "deepseek-r1-distill-qwen-1.5b",
+        role: "external_control",
+        api_id: "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      }),
+      "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    );
+    assert.equal(
+      candidateApiId({
+        id: "grok-4.5",
+        role: "reference_ceiling",
+        api_id: "grok-4.5",
+      }),
+      "cursor-grok-4.5-high",
+    );
+  } finally {
+    if (prev === undefined) delete process.env.PICSOU_GROK_MODEL;
+    else process.env.PICSOU_GROK_MODEL = prev;
+  }
+});
+
 test("matchAccessibleId maps logical gemma id to SGLang HF path", () => {
   const accessible = new Set(["google/gemma-4-E4B-it"]);
   assert.equal(
