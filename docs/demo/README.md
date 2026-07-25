@@ -1,5 +1,8 @@
 # Picsou demo — easy guide
 
+**Judges:** start at **[JURY-DEMO.md](./JURY-DEMO.md)** (canonical offline path).
+This page is the kid-readable walkthrough of the same demo.
+
 **Goal:** run Picsou on your computer, then read a clear report.
 
 No GPU. No login. No API key for the default demo.

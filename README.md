@@ -139,7 +139,9 @@ Models in `config/models.json`: `gemma-4-e2b-it`, `ministral-3b-instruct`,
 
 ## Demo examples
 
-Step-by-step offline demo: [docs/demo/README.md](docs/demo/README.md) · [docs/demo/HOW-IT-WORKS.md](docs/demo/HOW-IT-WORKS.md)
+**Jury path (login-free):** [docs/demo/JURY-DEMO.md](docs/demo/JURY-DEMO.md)
+
+Kid-readable walkthrough: [docs/demo/README.md](docs/demo/README.md) · [docs/demo/HOW-IT-WORKS.md](docs/demo/HOW-IT-WORKS.md)
 
 Example fixture summary (committed): [docs/demo/matrix-fixture-summary.json](docs/demo/matrix-fixture-summary.json)
 
@@ -165,7 +167,7 @@ scenarios/   matrix use cases (manifest.json)
 src/        packer, matrix eval, scoring helpers
 scripts/    score + repo contract checks
 examples/   perfect fixture output
-docs/demo/  how to run the offline demo + sample report
+docs/demo/  jury demo (JURY-DEMO.md) + kid guide + sample report
 workflow/   legacy single-benchmark contract
 test/       node:test coverage
 ```

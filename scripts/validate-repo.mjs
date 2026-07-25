@@ -9,6 +9,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
   "README.md",
   "LICENSE",
+  "docs/demo/JURY-DEMO.md",
   "docs/demo/README.md",
   "docs/demo/matrix-fixture-summary.json",
   "workflow/prompt.md",
@@ -47,10 +48,18 @@ const ledger = JSON.parse(
 );
 const readme = await fs.readFile(path.join(ROOT, "README.md"), "utf8");
 const demo = await fs.readFile(path.join(ROOT, "docs/demo/README.md"), "utf8");
+const juryDemo = await fs.readFile(
+  path.join(ROOT, "docs/demo/JURY-DEMO.md"),
+  "utf8",
+);
 
 assert.ok(
   readme.includes("npm run evaluate:matrix"),
   "README must document offline matrix quick start.",
+);
+assert.ok(
+  readme.includes("docs/demo/JURY-DEMO.md"),
+  "README must point judges at docs/demo/JURY-DEMO.md.",
 );
 assert.ok(
   /How it works/i.test(readme) && /How to use/i.test(readme),
@@ -59,6 +68,11 @@ assert.ok(
 assert.ok(
   demo.includes("npm run evaluate:matrix"),
   "Demo doc must document the offline matrix path.",
+);
+assert.ok(
+  juryDemo.includes("npm run evaluate:matrix") &&
+    juryDemo.includes("gemma-4-e2b-it"),
+  "Jury demo must document offline matrix path and Gemma 4 E2B.",
 );
 
 assert.equal(cases.cases.length, 5);
