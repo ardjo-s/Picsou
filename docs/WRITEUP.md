@@ -18,9 +18,11 @@ fields, **structure** them into a strict JSON task, **compress** noise, inject
 citations** as substrings of frozen source text.
 
 Gemma 4 E2B (`gemma-4-e2b-it`) is the SLM under test. Light baselines (Ministral 3B,
-DeepSeek 1.5B distill) and Grok 4.5 (reference ceiling) run on the same packed
-packet. An **Alien axis** compares frozen baseline packets against Alien-enriched
-mirrors so judges see whether extra context pays for itself in quality per token.
+DeepSeek 1.5B distill) and Grok 4.5 (market `reference_ceiling`: AA Intelligence
+Index #4 / 54, Jul 2026; strong on Snorkel GDPval+ triage and cost/token Pareto;
+not the hallucination leader) run on the same packed packet. An **Alien axis**
+compares frozen baseline packets against Alien-enriched mirrors so judges see
+whether extra context pays for itself in quality per token.
 
 The product is not another chat UI. It answers: *which small model is enough,
 and does Alien context justify its token cost?*

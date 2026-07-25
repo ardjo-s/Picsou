@@ -52,10 +52,26 @@ test("fixture matrix runs manifest scenarios × models × alien on/off", async (
     const grokWithout = scenario.cells.find(
       (cell) => cell.model === "grok-4.5" && cell.alien === false,
     );
+    const grokWith = scenario.cells.find(
+      (cell) => cell.model === "grok-4.5" && cell.alien === true,
+    );
     assert.ok(grokWithout, scenario.scenario_id);
+    assert.ok(grokWith, scenario.scenario_id);
     assert.ok(
-      grokWithout.score.quality_score < 1,
-      "reference_ceiling must use external_control fixture mutations",
+      grokWith.score.quality_score >= 0.95,
+      "reference_ceiling + Alien should sit near oracle",
+    );
+    assert.ok(
+      grokWithout.score.quality_score >= 0.85,
+      "reference_ceiling without Alien should stay near market ceiling",
+    );
+    assert.ok(
+      grokWith.score.quality_score >= grokWithout.score.quality_score,
+      "Alien should not hurt reference_ceiling quality",
+    );
+    assert.ok(
+      grokWithout.score.quality_score > slmWithout.score.quality_score,
+      "Grok ceiling must beat Gemma without Alien",
     );
   }
 });

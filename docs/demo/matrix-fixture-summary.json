@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T13:44:33.253Z",
+  "generated_at": "2026-07-25T14:38:10.315Z",
   "mode": "fixture",
   "track": "Context Engineering for SLMs",
   "models": [
@@ -50,7 +50,7 @@
       }
     }
   },
-  "calibration_summary": "Calibration: oracle=1.000 | reference=grok-4.5 0.580–0.610 | winner=gemma-4-e2b-it 1.000–1.000 (3 use cases) (confidence=demo-low, trials=1)",
+  "calibration_summary": "Calibration: oracle=1.000 | reference=grok-4.5 0.890–1.000 | winner=gemma-4-e2b-it 1.000–1.000 (3 use cases) (confidence=demo-low, trials=1)",
   "scenarios": [
     {
       "id": "nightmare-heat-lineage",
@@ -73,11 +73,11 @@
           "role": "reference_ceiling",
           "best_cell": {
             "alien": true,
-            "quality_score": 0.61,
-            "composite_score": null,
+            "quality_score": 1,
+            "composite_score": 0.732087471511,
             "metrics": {
-              "priority_accuracy": 0.4,
-              "attention_fit_accuracy": 0.6,
+              "priority_accuracy": 1,
+              "attention_fit_accuracy": 1,
               "signal_f1": 1,
               "evidence_exactness": 1
             },
@@ -121,9 +121,15 @@
         ]
       },
       "recommendation": {
-        "alien": true
+        "model": "gemma-4-e2b-it",
+        "alien": true,
+        "quality_score": 1,
+        "confidence": "demo-low"
       },
-      "grok_alien_off_quality": 0.47
+      "grok_alien_off_quality": 0.89,
+      "grok_alien_on_quality": 1,
+      "gemma_alien_off_quality": 0.47,
+      "gemma_alien_on_quality": 1
     },
     {
       "id": "nightmare-icu-fork",
@@ -146,11 +152,11 @@
           "role": "reference_ceiling",
           "best_cell": {
             "alien": true,
-            "quality_score": 0.58,
-            "composite_score": null,
+            "quality_score": 1,
+            "composite_score": 0.734635953896,
             "metrics": {
-              "priority_accuracy": 0.4,
-              "attention_fit_accuracy": 0.4,
+              "priority_accuracy": 1,
+              "attention_fit_accuracy": 1,
               "signal_f1": 1,
               "evidence_exactness": 1
             },
@@ -194,9 +200,15 @@
         ]
       },
       "recommendation": {
-        "alien": true
+        "model": "gemma-4-e2b-it",
+        "alien": true,
+        "quality_score": 1,
+        "confidence": "demo-low"
       },
-      "grok_alien_off_quality": 0.44
+      "grok_alien_off_quality": 0.89,
+      "grok_alien_on_quality": 1,
+      "gemma_alien_off_quality": 0.44,
+      "gemma_alien_on_quality": 1
     },
     {
       "id": "nightmare-track3-adversarial",
@@ -219,11 +231,11 @@
           "role": "reference_ceiling",
           "best_cell": {
             "alien": true,
-            "quality_score": 0.58,
-            "composite_score": null,
+            "quality_score": 1,
+            "composite_score": 0.732179055685,
             "metrics": {
-              "priority_accuracy": 0.4,
-              "attention_fit_accuracy": 0.4,
+              "priority_accuracy": 1,
+              "attention_fit_accuracy": 1,
               "signal_f1": 1,
               "evidence_exactness": 1
             },
@@ -267,9 +279,15 @@
         ]
       },
       "recommendation": {
-        "alien": true
+        "model": "gemma-4-e2b-it",
+        "alien": true,
+        "quality_score": 1,
+        "confidence": "demo-low"
       },
-      "grok_alien_off_quality": 0.44
+      "grok_alien_off_quality": 0.89,
+      "grok_alien_on_quality": 1,
+      "gemma_alien_off_quality": 0.44,
+      "gemma_alien_on_quality": 1
     }
   ]
 }

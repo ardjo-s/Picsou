@@ -149,12 +149,12 @@ const HELP = {
     "Le choix de Picsou : quel modèle + Alien on/off gagne pour CE job seulement.",
   why: "Pourquoi le gagnant bat les autres (qualité, coût, vitesse).",
   quality:
-    "À quel point les réponses sont justes vs le corrigé. 100% = parfait. 0% = presque tout faux.",
+    "Exactitude vs le corrigé figé. 100% = oracle (contrat Picsou). Ancre marché: triage≈Grok 4.5 (GDPval+); citations exactes≈Claude Fable/Opus (Grok hallucine plus sur AA Omniscience).",
   alien_lift:
     "Combien le MÊME modèle s'améliore quand on ajoute Alien. Positif = Alien a aidé.",
   tokens:
     "Nombre de morceaux de mots lus+écrits. Plus de tokens ≈ plus à digérer (et souvent plus cher).",
-  cost: "Argent estimé pour un run en dollars US. Plus petit = plus économe.",
+  cost: "Argent estimé pour un run en dollars US. Plus petit = plus économe. Marché: Grok 4.5 Pareto coût/tokens (AA).",
   latency:
     "Temps de réponse en millisecondes (1000 ms = 1 seconde). Plus petit = plus rapide.",
   composite:
@@ -162,11 +162,11 @@ const HELP = {
   eligible:
     "yes = assez bon pour être recommandé. no = n'a pas passé la barre qualité.",
   calibration:
-    "Contrôle : une réponse parfaite (oracle) doit scorer ~100%. Reference = autre modèle fort pour comparer.",
+    "Contrôle: oracle=100% contrat. Reference=Grok 4.5 (plafond marché demo: AA Index #4, fort triage/coût).",
   oracle:
-    "Une fausse réponse parfaite qu'on connaît déjà. Si le correcteur est juste, score proche de 100%.",
+    "Réponse parfaite connue d'avance sur le packet figé. Si le correcteur est juste → ~100%.",
   reference:
-    "Un modèle fort de comparaison. Pour voir si notre gagnant est vraiment bon.",
+    "Grok 4.5 = plafond marché de la démo (pas Fable #1 absolu). Sert à juger si Gemma+Alien match la qualité frontier à moindre coût.",
   runner_up: "Deuxième place. Montre l'écart avec le gagnant.",
   chart_composite:
     "Barres = score global par modèle×Alien. Plus haut = meilleur mélange juste + pas cher + rapide.",

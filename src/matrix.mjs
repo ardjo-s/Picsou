@@ -68,9 +68,8 @@ function applyFixtureMutations(perfect, mutations = []) {
   return output;
 }
 
-/** Map model.role to fixture-behavior.json mutation keys. */
+/** Map model.role to fixture-behavior.json mutation keys (1:1 with config roles). */
 function fixtureBehaviorRoleKey(role) {
-  if (role === "reference_ceiling") return "external_control";
   return role || "slm_under_test";
 }
 
@@ -685,7 +684,7 @@ export async function runEvalMatrix({
             : "Fixture trials use deterministic mutation noise; confidence stays demo-low until live repeats.",
         ]
       : [
-          "Live matrix: Gemma via PICSOU_ENDPOINT_* / OPENAI_BASE_URL (Brev/SGLang); Grok via XAI_API_KEY or ~/.grok/auth.json when x.ai is used.",
+          "Live matrix: Gemma/Ministral/DeepSeek via PICSOU_ENDPOINT_* (Brev/SGLang); Grok via XAI_API_KEY or ~/.grok/auth.json when x.ai is used.",
           "Models missing from an endpoint are skipped, not invented.",
           "Alien packets remain frozen mirrors in this MVP (not live MCP).",
           requestedTrials < 2

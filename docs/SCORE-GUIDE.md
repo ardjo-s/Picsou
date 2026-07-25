@@ -18,6 +18,20 @@ quality = 0.55 × priority_accuracy
 
 **0.75** is the minimum `quality_score` required before a cell can be recommended.
 
+## Market anchors for “100%” (July 2026)
+
+Oracle `1.0` is the **task contract** ceiling (perfect JSON triage on frozen sources). For jury talk, map each Picsou component to who currently owns that capability on the open market — then use **Grok 4.5** as the demo `reference_ceiling` because it is frontier-class on the axes that matter most for this thrift story:
+
+| Picsou criterion | Market “100%” reference (Jul 2026) | Why Grok 4.5 for the demo |
+| --- | --- | --- |
+| `priority_accuracy` / `attention_fit` | **Grok 4.5** — Snorkel GDPval+ mean pass 29% vs GPT-5.5 22% / Opus 4.8 21%; AA GDPval-AA Elo 1543 | Best independent professional-triage signal among published frontier runs |
+| `evidence_exactness` / grounded quotes | **Claude Fable 5 / Opus 4.8** — careful writing; Grok AA Omniscience hallucination **54%** (up from 25% on 4.3) | Grok is **not** the hallucination leader; Picsou still forces exact substrings so fixture Grok can hit oracle on this contract |
+| `signal_f1` (structured extraction) | **Fable 5** (peak coding/agentic) / Opus on neutral SWE harnesses | Grok trades blows (Terminal-Bench 83.3%, SWE-Bench Pro 64.7% behind Opus 69.2% / Fable 80.3%) |
+| Cost / token efficiency | **Grok 4.5** — AA Pareto; ~14k out tokens/task vs Opus ~4× more; API $2/$6 vs Opus $5/$25 | Demo pricing uses docs.x.ai rates |
+| Overall intelligence index | **Fable 5** > Opus 4.8 (56) > GPT-5.5 (55) > **Grok 4.5 (54, #4)** | Grok is frontier, not absolute #1 — honest label is `reference_ceiling`, not “best model ever” |
+
+Sources: [Artificial Analysis Grok 4.5](https://artificialanalysis.ai/articles/grok-4-5-brings-spacexai-to-the-the-intelligence-frontier), [Snorkel GDPval+](https://snorkel.ai/blog/grok-4-5-testing-results-how-spacexais-new-model-performs-on-real-professional-work/), [docs.x.ai pricing](https://docs.x.ai/developers/grok-4-5).
+
 ## Composite score (relative)
 
 Composite ranks eligible cells by mixing:
@@ -36,8 +50,12 @@ Each matrix scenario report includes:
 | Reference | Meaning |
 | --- | --- |
 | **Oracle** | Perfect output on frozen ground truth (= 1.0 ceiling) |
-| **Reference model** | Best cell for the configured `reference_ceiling` model (empirical strong baseline) |
+| **Reference model** | Best cell for configured `reference_ceiling` (demo: **Grok 4.5**, market frontier on triage + cost) |
 | **Winner** | Best eligible cell on quality × cost × latency × tokens |
+
+Fixture demo intent: Grok sits **near oracle** on packed packets; Gemma 4 E2B + Alien **matches that quality** at far lower cost → thrift win. DeepSeek stays the weak `external_control`.
+
+See [DEMO-REFERENCE-GROK.md](DEMO-REFERENCE-GROK.md) for hackathon framing, bias analysis, and the Cursor live path.
 
 ## Tokens
 
@@ -62,6 +80,7 @@ Fixture trials use deterministic mutation noise so offline demos still show vari
 - Live OpenAIRE / Alien MCP tool calls
 - Reasoning-chain efficiency
 - Human judgment or production usefulness beyond this frozen contract
+- General LMSYS / AA Intelligence Index scores (those only anchor the reference model choice)
 
 Verify the oracle locally:
 

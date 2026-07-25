@@ -2,7 +2,7 @@
   "currency": "USD",
   "unit": "per_million_tokens",
   "verified_at": "2026-07-25",
-  "source": "hackathon planning estimates for self-hosted light models on Brev",
+  "source": "Brev self-host estimates for SLMs; Grok 4.5 from docs.x.ai / Cursor models page ($2/$6, cache $0.30) 2026-07-25",
   "models": {
     "gemma-4-e2b-it": {
       "input": 0.05,
@@ -30,14 +30,14 @@
       "output": 1.2
     },
     "grok-4": {
-      "input": 3,
-      "cached_input": 0.75,
-      "output": 15
+      "input": 2,
+      "cached_input": 0.3,
+      "output": 6
     },
     "grok-4.5": {
-      "input": 3,
-      "cached_input": 0.75,
-      "output": 15
+      "input": 2,
+      "cached_input": 0.3,
+      "output": 6
     }
   }
 }
