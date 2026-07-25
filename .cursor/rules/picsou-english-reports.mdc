@@ -1,0 +1,26 @@
+---
+description: Canvas and matrix reports must be English-only (jury + GitHub).
+alwaysApply: true
+---
+
+# English-only Picsou reports
+
+Jury-visible and GitHub-visible report surfaces are **English only**.
+
+## Surfaces
+
+- Generated Cursor canvases (`picsou-*.canvas.tsx`)
+- Canvas generator chrome / HELP copy in `scripts/render-canvas-report.mjs`
+- Matrix recommendation text / why strings emitted by `src/matrix.mjs`
+- Demo docs under `docs/demo/` that describe how to read reports
+
+## Rules
+
+1. Do not add French (or other non-English) UI chrome, callouts, chart labels, table headers, or HELP tooltips to report canvases.
+2. Do not restore a report-level “Infobulles” / legend banner. Optional `i` tips may pin locally only.
+3. Private chat may follow the user’s language; report artifacts stay English.
+4. Keep `test/canvas-english.test.mjs` green — it fails the suite if French markers reappear in the renderer.
+
+## When editing the canvas renderer
+
+Translate or rewrite in English first. Run `npm test` and `npm run canvas:report` before shipping.

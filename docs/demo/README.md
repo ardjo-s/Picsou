@@ -73,11 +73,15 @@ Default matrix: **3 homework jobs × 4 models × Alien on/off = 24 cells**.
 
 ## How to read the canvas report
 
-1. Click or hover any **i** — a legend appears (Cursor has no system tooltips).
-2. Start at the top story: what was tested (4 steps).
-3. Look at the green recommendation — who won for *this* job only.
-4. Read the charts: quality in %, Alien with/without sticky notes, cost, speed.
-5. Open the ranking table for every cell.
+**Language rule:** every generated report canvas is **English only** (jury +
+GitHub). The renderer test `test/canvas-english.test.mjs` fails if French UI
+chrome sneaks back in. No report-level legend / “Infobulles” banner.
+
+1. Start at the top story: what was tested (4 steps).
+2. Look at the green recommendation — who won for *this* job only.
+3. Read the charts: quality in %, Alien with/without sticky notes, cost, speed.
+4. Open the ranking table for every cell.
+5. Optional: click any **i** for a short pinned tip (no banner in the report).
 
 ## Optional extras
 
