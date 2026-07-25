@@ -29,10 +29,10 @@
     {
       "id": "grok-4.5",
       "api_id": "grok-4.5",
-      "role": "external_control",
+      "role": "reference_ceiling",
       "serving": "openai-compatible",
       "endpoint_env": "XAI_BASE_URL",
-      "notes": "Frontier control. Fixture profile intentionally fails nightmare gates even with Alien notes — shows packing > raw model size."
+      "notes": "Empirical ceiling reference in matrix reports. Fixture profile may still fail nightmare gates to show packing > raw model size."
     }
   ],
   "discovery_contract": {

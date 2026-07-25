@@ -10,6 +10,8 @@ const requiredFiles = [
   "LICENSE",
   "docs/WRITEUP.md",
   "docs/ARCHITECTURE.md",
+  "docs/SCORE-GUIDE.md",
+  "docs/demo/JURY-DEMO.md",
   "workflow/prompt.md",
   "workflow/context-pack.md",
   "workflow/cases.json",
@@ -46,7 +48,38 @@ const ledger = JSON.parse(
 );
 const writeup = await fs.readFile(path.join(ROOT, "docs/WRITEUP.md"), "utf8");
 const words = writeup.trim().split(/\s+/).filter(Boolean).length;
+const readme = await fs.readFile(path.join(ROOT, "README.md"), "utf8");
+const skill = await fs.readFile(
+  path.join(ROOT, ".cursor/skills/picsou/SKILL.md"),
+  "utf8",
+);
+const architecture = await fs.readFile(
+  path.join(ROOT, "docs/ARCHITECTURE.md"),
+  "utf8",
+);
 
+assert.ok(words <= 1500, `WRITEUP.md is ${words} words; must stay under 1500.`);
+assert.ok(
+  /Context Engineering for SLMs/i.test(writeup),
+  "WRITEUP must name Track 3 (Context Engineering for SLMs).",
+);
+assert.ok(/Gemma/i.test(writeup), "WRITEUP must mention Gemma.");
+assert.ok(
+  readme.includes("npm run evaluate:matrix"),
+  "README must document offline matrix quick start.",
+);
+assert.ok(
+  readme.includes("Rubric coverage") || readme.includes("Why this can win"),
+  "README must map hackathon rubric to artifacts.",
+);
+assert.ok(
+  !/E4B \(SLM under test\)/i.test(architecture),
+  "ARCHITECTURE must not reference stale E4B as SLM under test.",
+);
+assert.ok(
+  skill.includes("fixture") && skill.includes("--canvas"),
+  "Picsou skill must document fixture-first jury path and canvas demo.",
+);
 assert.equal(cases.cases.length, 5);
 assert.equal(cases.evidence_mode, "frozen_openaire_style");
 assert.equal(cases.workflow_version, ledger.workflow_version);
@@ -54,7 +87,23 @@ assert.deepEqual(
   truth.cases.map((item) => item.case_id),
   cases.cases.map((item) => item.case_id),
 );
-assert.ok(words <= 1500, `WRITEUP.md is ${words} words; must stay under 1500.`);
+
+const scoreGuide = await fs.readFile(path.join(ROOT, "docs/SCORE-GUIDE.md"), "utf8");
+assert.ok(scoreGuide.includes("1.0 = oracle"), "SCORE-GUIDE must define the oracle ceiling.");
+
+const manifest = JSON.parse(
+  await fs.readFile(path.join(ROOT, "scenarios/manifest.json"), "utf8"),
+);
+
+const referenceTagged = models.demo_candidates.some(
+  (item) => item.role === "reference_ceiling",
+);
+assert.ok(referenceTagged, "One demo candidate must use role reference_ceiling.");
+
+assert.ok(
+  manifest.scenarios.some((scenario) => scenario.nightmare),
+  "Matrix manifest must include nightmare scenarios.",
+);
 
 const ledgerUrls = new Set(ledger.sources.map((source) => source.url));
 let fitCount = 0;
@@ -84,9 +133,6 @@ for (const candidate of models.demo_candidates) {
   assert.ok(pricing.models[candidate.id], `Missing pricing for ${candidate.id}`);
 }
 
-const manifest = JSON.parse(
-  await fs.readFile(path.join(ROOT, "scenarios/manifest.json"), "utf8"),
-);
 const scenarioRequired = [
   "cases.json",
   "ground-truth.json",

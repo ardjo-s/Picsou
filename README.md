@@ -15,6 +15,15 @@ context.
 Pack context → matrix eval (model × Alien) → one evidence-backed recommendation
 per use case.
 
+## Rubric coverage (Paris Gemma 4 Hackathon)
+
+| Criterion (pts) | Artifact judges open in &lt;2 min |
+| --- | --- |
+| Gemma Integration (30) | `config/models.json` (Gemma 4 E2B SLM), `docs/WRITEUP.md` § How Gemma 4 is used, optional Brev live path in README |
+| Innovation & Impact (30) | Nightmare scenarios in `scenarios/manifest.json`, Alien on/off matrix, per-use-case valence recos in `results/latest-matrix.json` |
+| Functionality (20) | `npm test` + `npm run evaluate:matrix` (offline, no GPU), [docs/demo/JURY-DEMO.md](docs/demo/JURY-DEMO.md) |
+| Presentation & Writeup (20) | [docs/WRITEUP.md](docs/WRITEUP.md), [docs/SCORE-GUIDE.md](docs/SCORE-GUIDE.md), optional `/Picsou` canvas reports |
+
 ## Why this can win
 
 | Rubric (100) | How Picsou hits it |
@@ -33,10 +42,12 @@ npm test
 npm run score -- examples/perfect-output.json
 npm run evaluate:fixture
 npm run evaluate:matrix
+npm run evaluate:matrix -- --trials 3
 ```
 
-Expected perfect fixture quality score: `1.0`. Matrix fixture runs 3 nightmare
-scenarios × 4 models × Alien on/off (24 cells).
+Expected perfect fixture quality score: `1.0`. See [docs/SCORE-GUIDE.md](docs/SCORE-GUIDE.md)
+for what the score means (oracle = 1.0, reference model, repeated trials).
+Matrix fixture runs 3 nightmare scenarios × 4 models × Alien on/off (24 cells).
 
 ## Live eval (optional)
 
@@ -82,9 +93,9 @@ test/         node:test coverage
 
 ## Submission checklist
 
-1. Public GitHub repo (this one) — no login wall
-2. Kaggle Writeup from `docs/WRITEUP.md` (submit before deadline)
-3. Demo attachment: fixture CLI output and/or live endpoint recording
+1. Public GitHub repo: https://github.com/ardjo-s/Picsou — no login wall
+2. Kaggle Writeup from `docs/WRITEUP.md` (submit before deadline) — see `docs/KAGGLE-SUBMIT.md`
+3. Demo attachment: [docs/demo/JURY-DEMO.md](docs/demo/JURY-DEMO.md) + `npm run evaluate:matrix` output
 4. State the track: **Context Engineering for SLMs**
 
 Writeup URL to create:  

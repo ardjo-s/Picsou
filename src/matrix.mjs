@@ -6,10 +6,17 @@ import { annotatePackStats, packContext } from "./context.mjs";
 import { createLiveProviderRouter } from "./providers.mjs";
 import {
   aggregateTokens,
+  aggregateTrialRuns,
   estimateCost,
   rankResults,
   summarizeTokens,
 } from "./score-lib.mjs";
+import {
+  buildScenarioCalibration,
+  deriveConfidence,
+  formatCalibrationSummary,
+  scorePerfectForScenario,
+} from "./calibration.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -59,6 +66,66 @@ function applyFixtureMutations(perfect, mutations = []) {
     }
   }
   return output;
+}
+
+function hashString(input) {
+  let h = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/** Deterministic extra fixture mutations so repeated trials vary. */
+function fixtureTrialExtraMutations(scenarioId, model, alien, trialIndex, casesDocument) {
+  if (trialIndex === 0) return [];
+  const caseIds = casesDocument.cases.map((item) => item.case_id);
+  if (!caseIds.length) return [];
+  const key = `${scenarioId}:${model.id}:${alien}:${trialIndex}`;
+  const h = hashString(key);
+  const target = caseIds[h % caseIds.length];
+  const mod = trialIndex % 3;
+  if (mod === 0) return [`set_skip:${target}`];
+  if (mod === 1) return [`set_medium:${target}`];
+  return [`set_high:${target}`];
+}
+
+function finalizeCellFromTrials(trialRuns, keepTrials) {
+  const template = trialRuns[0];
+  const stats = aggregateTrialRuns(trialRuns, { requested: trialRuns.length });
+  const completed = trialRuns.filter((run) => run.status === "completed");
+  if (!completed.length) {
+    return { ...template, trials: stats };
+  }
+  const representative = { ...completed[completed.length - 1] };
+  if (stats.quality_score?.mean != null) {
+    representative.score = {
+      ...representative.score,
+      quality_score: stats.quality_score.mean,
+    };
+  }
+  if (stats.latency_ms?.mean != null) {
+    representative.latency_ms = Math.round(stats.latency_ms.mean);
+  }
+  if (stats.tokens?.total_tokens?.mean != null) {
+    representative.tokens = {
+      ...representative.tokens,
+      input_tokens:
+        stats.tokens.input_tokens?.mean != null
+          ? Math.round(stats.tokens.input_tokens.mean)
+          : representative.tokens?.input_tokens,
+      output_tokens:
+        stats.tokens.output_tokens?.mean != null
+          ? Math.round(stats.tokens.output_tokens.mean)
+          : representative.tokens?.output_tokens,
+      cached_tokens: representative.tokens?.cached_tokens ?? 0,
+      total_tokens: Math.round(stats.tokens.total_tokens.mean),
+    };
+  }
+  representative.trials = stats;
+  if (keepTrials) representative.trial_runs = trialRuns;
+  return representative;
 }
 
 async function loadFixtureBehavior(scenarioId) {
@@ -122,7 +189,14 @@ async function loadScenario(scenarioId, alien) {
   };
 }
 
-async function runCell({ scenarioId, model, alien, fixture, router }) {
+async function runCell({
+  scenarioId,
+  model,
+  alien,
+  fixture,
+  router,
+  trialIndex = 0,
+}) {
   const loaded = await loadScenario(scenarioId, alien);
   const pack = annotatePackStats(packContext(loaded.cases, loaded.prompt));
   const started = Date.now();
@@ -143,9 +217,32 @@ async function runCell({ scenarioId, model, alien, fixture, router }) {
         (roleKey === "slm_under_test" && !alien
           ? ["set_high:__noop__"]
           : []);
-      output = applyFixtureMutations(baseOutput, mutations);
+      const trialMutations = fixture
+        ? fixtureTrialExtraMutations(
+            scenarioId,
+            model,
+            alien,
+            trialIndex,
+            loaded.cases,
+          )
+        : [];
+      output = applyFixtureMutations(baseOutput, [
+        ...mutations,
+        ...trialMutations,
+      ]);
       usage = fixtureUsage(model, pack.stats, alien);
-      latency_ms = fixtureLatency(model, alien);
+      if (trialIndex > 0) {
+        usage = {
+          ...usage,
+          input_tokens: usage.input_tokens + trialIndex * 4,
+          output_tokens: usage.output_tokens + trialIndex * 2,
+          input_tokens_details: {
+            cached_tokens:
+              (usage.input_tokens_details?.cached_tokens || 0) + trialIndex,
+          },
+        };
+      }
+      latency_ms = fixtureLatency(model, alien) + trialIndex * 7;
     } else {
       const response = await router.run(model, pack);
       output = response.output;
@@ -266,7 +363,10 @@ function summarizeCasesPacket(casesDocument) {
   };
 }
 
-async function evaluateScenario(scenarioMeta, { fixture, router, runnable, skipped }) {
+async function evaluateScenario(
+  scenarioMeta,
+  { fixture, router, runnable, skipped, trials = 1, keepTrials = false, modelsConfig },
+) {
   const benchmark = await readJson("workflow/benchmark.json");
   const workflow = { benchmark };
   const base = scenarioDir(scenarioMeta.id);
@@ -275,7 +375,8 @@ async function evaluateScenario(scenarioMeta, { fixture, router, runnable, skipp
     readJson(`${base}/cases.json`),
     readJson(`${base}/cases.alien.json`),
   ]);
-  const packPreview = annotatePackStats(packContext(casesPlain, prompt));
+  const packOff = annotatePackStats(packContext(casesPlain, prompt));
+  const packOn = annotatePackStats(packContext(casesAlien, prompt));
   const workflow_evaluated = {
     scenario_id: scenarioMeta.id,
     title: scenarioMeta.title,
@@ -283,13 +384,17 @@ async function evaluateScenario(scenarioMeta, { fixture, router, runnable, skipp
     hard: Boolean(scenarioMeta.hard),
     nightmare: Boolean(scenarioMeta.nightmare),
     prompt_path: `${base}/prompt.md`,
+    // Exact messages scored — expand in canvas to read in full.
     prompt_system: prompt,
+    user_message_without_alien: packOff.user,
+    user_message_with_alien: packOn.user,
     pack_user_preamble: [
       `Triage every case in this packed ${casesPlain.evidence_mode || "evidence"} packet.`,
       `workflow_version must be exactly ${casesPlain.workflow_version}.`,
       "Return only the required structured JSON.",
     ].join("\n"),
-    pack_stats_without_alien: packPreview.stats,
+    pack_stats_without_alien: packOff.stats,
+    pack_stats_with_alien: packOn.stats,
     cases_without_alien: summarizeCasesPacket(casesPlain),
     cases_with_alien: summarizeCasesPacket(casesAlien),
     alien_axis: [false, true],
@@ -310,15 +415,20 @@ async function evaluateScenario(scenarioMeta, { fixture, router, runnable, skipp
 
   for (const model of runnable) {
     for (const alien of [false, true]) {
-      cells.push(
-        await runCell({
-          scenarioId: scenarioMeta.id,
-          model,
-          alien,
-          fixture,
-          router,
-        }),
-      );
+      const trialRuns = [];
+      for (let trialIndex = 0; trialIndex < trials; trialIndex += 1) {
+        trialRuns.push(
+          await runCell({
+            scenarioId: scenarioMeta.id,
+            model,
+            alien,
+            fixture,
+            router,
+            trialIndex,
+          }),
+        );
+      }
+      cells.push(finalizeCellFromTrials(trialRuns, keepTrials));
     }
   }
 
@@ -359,6 +469,25 @@ async function evaluateScenario(scenarioMeta, { fixture, router, runnable, skipp
     ? deltas.find((item) => item.model === winner.model)
     : null;
   const alienLift = winnerDelta?.delta_quality ?? null;
+  const winnerCell = winner
+    ? completed.find(
+        (cell) => cell.model === winner.model && cell.alien === winner.alien,
+      )
+    : null;
+  const confidence = deriveConfidence({
+    fixture,
+    trialsRequested: trials,
+    winnerQualityStdev: winnerCell?.trials?.quality_score?.stdev,
+    allCellsCompleted: failed.length === 0 && skipped.length === 0,
+  });
+  const oracleScore = await scorePerfectForScenario(scenarioMeta.id, readJson);
+  const calibration = await buildScenarioCalibration({
+    scenarioId: scenarioMeta.id,
+    cells,
+    benchmark,
+    modelsConfig,
+    scorePerfect: oracleScore,
+  });
   const valence = winner
     ? {
         quality: winner.quality_score,
@@ -412,15 +541,17 @@ async function evaluateScenario(scenarioMeta, { fixture, router, runnable, skipp
     alien_delta: deltas,
     skipped_models: skipped,
     failed_models: failed,
+    calibration,
     recommendation: winner
       ? {
           model: winner.model,
           alien: winner.alien,
-          confidence: "demo-low",
+          confidence,
           quality_score: winner.quality_score,
           estimated_cost_usd: winner.estimated_cost_usd,
           latency_ms: winner.latency_ms,
           tokens: winner.tokens,
+          trials: winnerCell?.trials ?? null,
           valence,
           why,
         }
@@ -438,7 +569,10 @@ export async function runEvalMatrix({
   fixture = true,
   scenarioId = null,
   fetchImpl = fetch,
+  trials = 1,
+  keepTrials = false,
 } = {}) {
+  const requestedTrials = Math.max(1, Number(trials) || 1);
   const manifest = await readJson("scenarios/manifest.json");
   const modelsConfig = await readJson("config/models.json");
   const selected = scenarioId
@@ -476,7 +610,15 @@ export async function runEvalMatrix({
   const scenarios = [];
   for (const scenario of selected) {
     scenarios.push(
-      await evaluateScenario(scenario, { fixture, router, runnable, skipped }),
+      await evaluateScenario(scenario, {
+        fixture,
+        router,
+        runnable,
+        skipped,
+        trials: requestedTrials,
+        keepTrials,
+        modelsConfig,
+      }),
     );
   }
 
@@ -504,8 +646,8 @@ export async function runEvalMatrix({
     },
   );
 
-  return {
-    report_version: "1.0.0",
+  const report = {
+    report_version: "1.1.0",
     generated_at: new Date().toISOString(),
     mode: fixture ? "fixture" : "live",
     track: "Context Engineering for SLMs",
@@ -513,6 +655,10 @@ export async function runEvalMatrix({
     matrix_version: manifest.matrix_version,
     models: modelsConfig.demo_candidates.map((m) => m.id),
     alien_axis: manifest.alien_axis,
+    trials: {
+      requested: requestedTrials,
+      keep_trial_runs: keepTrials,
+    },
     providers,
     summary: {
       scenario_count: scenarios.length,
@@ -528,13 +674,19 @@ export async function runEvalMatrix({
       ? [
           "MVP fixture matrix: Alien packets are frozen Alien-URL mirrors, not live MCP calls.",
           "Live model serving (Brev/SGLang + Grok API) not required for --fixture.",
-          "Confidence remains demo-low until live trials repeat.",
+          requestedTrials < 2
+            ? "Confidence remains demo-low until --trials repeats the matrix."
+            : "Fixture trials use deterministic mutation noise; confidence stays demo-low until live repeats.",
         ]
       : [
           "Live matrix: Gemma via PICSOU_ENDPOINT_* / OPENAI_BASE_URL (Brev/SGLang); Grok via XAI_API_KEY or ~/.grok/auth.json when x.ai is used.",
           "Models missing from an endpoint are skipped, not invented.",
           "Alien packets remain frozen mirrors in this MVP (not live MCP).",
-          "Confidence remains demo-low until trials repeat.",
+          requestedTrials < 2
+            ? "Confidence remains demo-low until --trials repeats the matrix."
+            : "Live trials at temperature 0; residual variance is timing/usage unless the provider is non-deterministic.",
         ],
   };
+  report.calibration_summary = formatCalibrationSummary(report);
+  return report;
 }

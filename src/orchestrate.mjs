@@ -8,8 +8,15 @@ import { runEvalMatrix } from "./matrix.mjs";
 export async function orchestratePicsouDemo({
   fixture = true,
   scenarioId = null,
+  trials = 1,
+  keepTrials = false,
 } = {}) {
-  const report = await runEvalMatrix({ fixture, scenarioId });
+  const report = await runEvalMatrix({
+    fixture,
+    scenarioId,
+    trials,
+    keepTrials,
+  });
   return {
     ...report,
     orchestrator: "gemma",

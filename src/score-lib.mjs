@@ -33,6 +33,53 @@ export function summarizeTokens(usage) {
   };
 }
 
+/** Mean/min/max/stdev for a numeric series. */
+export function aggregateNumericStats(values) {
+  const nums = (values || []).filter(Number.isFinite);
+  if (!nums.length) return null;
+  const mean = nums.reduce((sum, value) => sum + value, 0) / nums.length;
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+  const variance =
+    nums.length > 1
+      ? nums.reduce((sum, value) => sum + (value - mean) ** 2, 0) / nums.length
+      : 0;
+  return {
+    mean: Number(mean.toFixed(6)),
+    min: Number(min.toFixed(6)),
+    max: Number(max.toFixed(6)),
+    stdev: Number(Math.sqrt(variance).toFixed(6)),
+  };
+}
+
+/** Aggregate trial runs for one matrix cell. */
+export function aggregateTrialRuns(runs, { requested } = {}) {
+  const completed = (runs || []).filter((run) => run.status === "completed");
+  const composites = completed
+    .map((run) => run.composite_score)
+    .filter(Number.isFinite);
+  return {
+    requested: requested ?? runs?.length ?? 0,
+    completed: completed.length,
+    quality_score: aggregateNumericStats(
+      completed.map((run) => run.score?.quality_score),
+    ),
+    composite_score: aggregateNumericStats(composites),
+    latency_ms: aggregateNumericStats(completed.map((run) => run.latency_ms)),
+    tokens: {
+      total_tokens: aggregateNumericStats(
+        completed.map((run) => run.tokens?.total_tokens),
+      ),
+      input_tokens: aggregateNumericStats(
+        completed.map((run) => run.tokens?.input_tokens),
+      ),
+      output_tokens: aggregateNumericStats(
+        completed.map((run) => run.tokens?.output_tokens),
+      ),
+    },
+  };
+}
+
 /** Sum token metrics across completed cells (one workflow / scenario). */
 export function aggregateTokens(cells) {
   const completed = (cells || []).filter(
@@ -119,6 +166,8 @@ export function rankResults(results, workflow) {
     (a, b) =>
       (b.composite_score ?? -1) - (a.composite_score ?? -1) ||
       b.score.quality_score - a.score.quality_score ||
+      (a.trials?.quality_score?.stdev ?? Infinity) -
+        (b.trials?.quality_score?.stdev ?? Infinity) ||
       (a.tokens?.total_tokens ?? Infinity) - (b.tokens?.total_tokens ?? Infinity) ||
       (a.estimated_cost_usd ?? Infinity) - (b.estimated_cost_usd ?? Infinity) ||
       a.latency_ms - b.latency_ms,
