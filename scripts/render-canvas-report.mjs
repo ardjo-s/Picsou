@@ -122,73 +122,81 @@ function buildUseCases(report) {
 const SHARED_UI = `
 const HELP = {
   picsou:
-    "Picsou compare de petits modèles d'IA sur des devoirs difficiles. Il dit si un petit modèle suffit quand les notes sont bien emballées.",
+    "Picsou = un prof. Il donne le MÊME devoir dur à plusieurs élèves (petits modèles d'IA), note les copies, puis dit quel élève assez bon coûte le moins cher.",
   hover_i:
-    "Survole ou clique un i : la légende s'affiche dans le bandeau jaune/bleu en haut (le title HTML natif ne marche pas dans Cursor).",
+    "Survole ou clique le i. La légende s'affiche dans le bandeau du haut (Cursor n'affiche pas les tooltips système).",
+  story:
+    "L'histoire en 4 temps : emballer les notes → faire passer tous les élèves → corriger avec un corrigé figé → choisir le gagnant économe.",
   use_case:
-    "Un cas d'usage = un seul job (une histoire). On ne mélange jamais les scores entre jobs.",
-  hard: "HARD = le devoir contient des pièges exprès.",
+    "Un cas d'usage = UN seul devoir / une seule histoire. On ne mélange jamais les notes entre devoirs.",
+  hard: "HARD = le devoir contient des pièges exprès (mauvais pays, vieille année, titre alléchant).",
   nightmare:
-    "NIGHTMARE = même un gros modèle peut rater sans de bonnes notes Alien.",
-  actor: "Qui a besoin de la réponse (aide ministre, médecin, jury…).",
+    "NIGHTMARE = version encore plus piégeuse. Sans bonnes notes Alien, même un gros modèle peut se tromper.",
+  actor: "La personne qui a besoin de la réponse (aide ministre, médecin, jury…).",
   alien:
-    "Alien = notes open-science spéciales. Off = paquet simple. On = paquet avec indices Alien. Mêmes modèles, devoir différent.",
+    "Alien = post-it open-science. Off = paquet simple. On = mêmes papiers + indices. On compare le MÊME modèle avec et sans post-it.",
   workflow:
-    "Exactement ce qu'on a testé : quel prompt, quels papiers, quels modèles, Alien on et off.",
+    "La fiche du devoir : consignes, papiers, modèles testés, Alien on et off. C'est exactement ce qui a été noté.",
   system_prompt:
-    "Les règles du prof que chaque modèle doit suivre. Mêmes règles pour tous les élèves (modèles).",
+    "Les règles du prof. Tous les élèves reçoivent les MÊMES règles.",
   user_preamble:
-    "Courtes consignes fixes avant la liste des papiers.",
+    "Courtes consignes avant la liste des papiers.",
   user_off:
-    "Le devoir COMPLET sans notes Alien — tout ce que le modèle a vu.",
+    "Le devoir COMPLET sans post-it Alien — tout le texte vu par le modèle.",
   user_on:
-    "Le devoir COMPLET avec notes Alien — même forme, plus d'indices.",
+    "Le devoir COMPLET avec post-it Alien — même forme, plus d'indices.",
   evidence_index:
-    "Liste rapide des papiers (titres et années). Ouvre le message user ci-dessus pour le texte entier.",
+    "Liste courte des papiers (titre + année). Ouvre le message user pour le texte entier.",
   recommendation:
-    "Le choix de Picsou : quel modèle + Alien on/off gagne pour CE job seulement.",
-  why: "Pourquoi le gagnant bat les autres (qualité, coût, vitesse).",
+    "Le choix de Picsou pour CE devoir seulement : quel modèle + Alien on/off.",
+  why: "Pourquoi ce gagnant : juste + pas trop cher + assez rapide.",
   quality:
-    "Exactitude vs le corrigé figé. 100% = oracle (contrat Picsou). Ancre marché: triage≈Grok 4.5 (GDPval+); citations exactes≈Claude Fable/Opus (Grok hallucine plus sur AA Omniscience).",
+    "Exactitude vs le corrigé. 100% = copie parfaite sur CE devoir figé (pas « intelligent partout »).",
+  quality_bar:
+    "Barre de passage ≈ 75%. En dessous, la cellule ne peut pas gagner (eligible = no).",
   alien_lift:
-    "Combien le MÊME modèle s'améliore quand on ajoute Alien. Positif = Alien a aidé.",
+    "Combien le MÊME modèle s'améliore avec les post-it Alien. + = Alien a aidé. − = Alien n'a pas payé.",
   tokens:
-    "Nombre de morceaux de mots lus+écrits. Plus de tokens ≈ plus à digérer (et souvent plus cher).",
-  cost: "Argent estimé pour un run en dollars US. Plus petit = plus économe. Marché: Grok 4.5 Pareto coût/tokens (AA).",
+    "Morceaux de texte lus + écrits. Plus grand = repas plus lourd (souvent plus cher).",
+  cost: "Argent estimé pour un run ($ US). Plus petit = plus économe.",
   latency:
-    "Temps de réponse en millisecondes (1000 ms = 1 seconde). Plus petit = plus rapide.",
+    "Temps d'attente. 1000 ms = 1 seconde. Plus petit = plus rapide.",
   composite:
-    "Un seul score qui mélange qualité + économie + vitesse. Plus haut = meilleur choix pour ce job.",
+    "Note globale : juste + économe + rapide. Plus haut = meilleur choix pour ce devoir.",
   eligible:
-    "yes = assez bon pour être recommandé. no = n'a pas passé la barre qualité.",
+    "yes = assez juste pour être recommandé. no = sous la barre qualité.",
   calibration:
-    "Contrôle: oracle=100% contrat. Reference=Grok 4.5 (plafond marché demo: AA Index #4, fort triage/coût).",
+    "Contrôle honnêteté : Oracle (corrigé parfait) ≈ 100%. Référence = gros modèle plafond. Gagnant = choix Picsou.",
   oracle:
-    "Réponse parfaite connue d'avance sur le packet figé. Si le correcteur est juste → ~100%.",
+    "La copie parfaite connue d'avance. Si le correcteur est juste, Oracle ≈ 100%.",
   reference:
-    "Grok 4.5 = plafond marché de la démo (pas Fable #1 absolu). Sert à juger si Gemma+Alien match la qualité frontier à moindre coût.",
-  runner_up: "Deuxième place. Montre l'écart avec le gagnant.",
+    "Grok 4.5 = plafond de la démo. Sert à voir si Gemma + Alien approche la qualité d'un gros modèle, moins cher.",
+  runner_up: "Deuxième place — pour voir l'écart avec le gagnant.",
   chart_composite:
-    "Barres = score global par modèle×Alien. Plus haut = meilleur mélange juste + pas cher + rapide.",
+    "Barres = note globale par modèle×Alien. Plus haut = meilleur mélange juste + pas cher + rapide.",
   chart_quality:
-    "Barres = exactitude seule (0 à 1). On ignore coût et vitesse ici.",
+    "Barres = exactitude seule en %. On ignore coût et vitesse ici. Ligne 75% = barre de passage.",
   chart_alien_q:
-    "Pour chaque modèle : barre gauche sans Alien, droite avec Alien. L'écart = Alien lift.",
+    "Pour chaque modèle : gauche sans Alien, droite avec Alien. L'écart = Alien lift.",
   chart_alien_t:
-    "Tokens avec/sans Alien. Alien peut allonger le paquet — regarde si la qualité monte assez.",
+    "Tokens avec/sans Alien. Si Alien allonge le paquet, la qualité doit monter assez pour valoir le coup.",
   chart_cost:
     "Coût estimé en micro-dollars (µ$). 1 µ$ = un millionième de dollar.",
   chart_latency: "Temps de réponse en ms. Plus bas = plus snappy.",
+  chart_index_quality:
+    "Qualité du gagnant de chaque devoir (en %). Compare les jobs côte à côte.",
+  chart_index_lift:
+    "Alien lift du gagnant par devoir. + = les post-it ont aidé sur ce job.",
   ranking:
-    "Classement complet pour chaque cellule modèle × Alien. Eligible=yes = a passé la barre.",
+    "Toutes les cellules modèle × Alien. Eligible=yes = a passé la barre.",
   q_sigma:
-    "Combien la qualité bouge entre répétitions. Proche de 0 = stable. Plus grand = bruyant.",
+    "Si on répète le test : écart de qualité. ≈0 = stable. Grand = bruyant.",
   limits:
-    "Limites honnêtes (démo fixture, pas une garantie production).",
+    "Limites honnêtes (souvent démo fixture). Pas une promesse production.",
   index:
-    "Carte de tous les jobs. Ouvre un canvas use-case pour les graphes. Déplie les prompts pour le texte.",
+    "Carte de tous les devoirs. Ouvre un canvas use-case pour les détails. Déplie les prompts pour le texte.",
   prompts_section:
-    "Cartes fermées par défaut. Clique un titre pour ouvrir le texte exact score.",
+    "Cartes fermées par défaut. Clique un titre pour lire le texte exact noté.",
 } as const;
 
 /** Shared legend state keys — Cursor canvas does not show native HTML title tooltips. */
@@ -206,6 +214,63 @@ function LegendBanner() {
     <Callout tone="info" title="Légende">
       <Text style={{ lineHeight: 1.5 }}>{legend}</Text>
     </Callout>
+  );
+}
+
+function StoryBoard() {
+  const steps = [
+    {
+      n: "1",
+      title: "Emballer",
+      body: "On garde les notes utiles, on ajoute des pièges, parfois des post-it Alien.",
+    },
+    {
+      n: "2",
+      title: "Faire passer",
+      body: "Chaque modèle répond au MÊME devoir (Alien on et off).",
+    },
+    {
+      n: "3",
+      title: "Corriger",
+      body: "Picsou compare à un corrigé figé. Citations exactes obligatoires.",
+    },
+    {
+      n: "4",
+      title: "Choisir",
+      body: "Parmi ceux assez justes (≥75%), on garde le plus économe.",
+    },
+  ];
+  return (
+    <Stack gap={10}>
+      <SectionTitle
+        title="Comment ça marche"
+        help={HELP.story}
+        subtitle="Quatre temps — comme un contrôle de maths avec plusieurs élèves."
+      />
+      <Grid columns={4} gap={12}>
+        {steps.map((step) => (
+          <Card key={step.n}>
+            <CardHeader
+              trailing={
+                <Text
+                  weight="semibold"
+                  style={{ letterSpacing: "-0.02em", fontSize: 18 }}
+                >
+                  {step.n}
+                </Text>
+              }
+            >
+              {step.title}
+            </CardHeader>
+            <CardBody>
+              <Text size="small" style={{ lineHeight: 1.45 }}>
+                {step.body}
+              </Text>
+            </CardBody>
+          </Card>
+        ))}
+      </Grid>
+    </Stack>
   );
 }
 
@@ -477,12 +542,16 @@ function modelLabel(row: { model: string; alien: boolean | null }) {
 export default function PicsouUseCaseCanvas() {
   const rows = [...UC.rows];
   const categories = rows.map((row) => modelLabel(row));
-  const quality = rows.map((row) => Number(row.quality) || 0);
+  const qualityPct = rows.map((row) =>
+    Math.round((Number(row.quality) || 0) * 1000) / 10,
+  );
   const costMicros = rows.map((row) =>
     Math.round((Number(row.cost) || 0) * 1_000_000),
   );
   const latency = rows.map((row) => Number(row.latency) || 0);
-  const composites = rows.map((row) => Number(row.composite) || 0);
+  const composites = rows.map((row) =>
+    Math.round((Number(row.composite) || 0) * 1000) / 1000,
+  );
   const winner = UC.winner;
   const valence = UC.valence;
   const wf = UC.workflow_evaluated;
@@ -491,8 +560,12 @@ export default function PicsouUseCaseCanvas() {
   const models = wf?.models_evaluated ?? [];
   const delta = UC.alien_delta ?? [];
   const deltaModels = delta.map((d) => d.model);
-  const withAlien = delta.map((d) => Number(d.quality_with_alien) || 0);
-  const withoutAlien = delta.map((d) => Number(d.quality_without_alien) || 0);
+  const withAlienPct = delta.map(
+    (d) => Math.round((Number(d.quality_with_alien) || 0) * 1000) / 10,
+  );
+  const withoutAlienPct = delta.map(
+    (d) => Math.round((Number(d.quality_without_alien) || 0) * 1000) / 10,
+  );
   const tokenWithAlien = delta.map(
     (d) => Number(d.tokens_with_alien?.total_tokens) || 0,
   );
@@ -500,6 +573,9 @@ export default function PicsouUseCaseCanvas() {
     (d) => Number(d.tokens_without_alien?.total_tokens) || 0,
   );
   const cal = UC.calibration;
+  const qualityFloor =
+    Number(wf?.scoring_contract?.minimum_quality_to_recommend) || 0.75;
+  const qualityFloorPct = Math.round(qualityFloor * 100);
 
   return (
     <Stack gap={22} style={{ padding: 24 }}>
@@ -534,27 +610,28 @@ export default function PicsouUseCaseCanvas() {
 
       <LegendBanner />
 
+      <StoryBoard />
+
       <Callout tone="info" title="Comment lire ce report">
         <Text style={{ lineHeight: 1.5 }}>
           Survole ou clique un <Text weight="semibold">i</Text> — la légende
-          s'affiche dans le bandeau juste au-dessus. Haut = ce qu'on a testé.
-          Milieu = qui gagne. Bas = graphiques.
+          s'affiche dans le bandeau juste au-dessus. Haut = le devoir testé.
+          Milieu = qui gagne. Bas = graphiques (qualité en %).
         </Text>
       </Callout>
 
       {wf ? (
         <Card>
           <CardTitle
-            title="Exact workflow evaluated"
+            title="Fiche du devoir testé"
             help={HELP.workflow}
             trailing={wf.prompt_path}
           />
           <CardBody>
             <Stack gap={12}>
-              <Callout tone="info" title="What was scored">
-                Each cell = same system prompt + evidence packet (Alien off or
-                on) + one model. Scores come from structured answers vs an
-                answer key.
+              <Callout tone="info" title="Ce qui a été noté">
+                Chaque case = mêmes règles + paquet de notes (Alien off ou on)
+                + un modèle. Picsou compare la copie à un corrigé figé.
               </Callout>
               <Table
                 headers={["Field", "Value"]}
@@ -625,15 +702,15 @@ export default function PicsouUseCaseCanvas() {
       ) : null}
 
       <SectionTitle
-        title="Prompts evaluated"
+        title="Textes exacts notés"
         help={HELP.prompts_section}
-        subtitle="Cards start closed. Click a header to read the exact text that was scored."
+        subtitle="Cartes fermées. Clique un titre pour lire le texte noté."
       />
 
       {wf?.prompt_system ? (
         <Card collapsible defaultOpen={false}>
           <CardTitle
-            title="System prompt — full text"
+            title="Règles du prof — texte entier"
             help={HELP.system_prompt}
             trailing={charCount(wf.prompt_system)}
           />
@@ -651,7 +728,7 @@ export default function PicsouUseCaseCanvas() {
       {wf?.pack_user_preamble ? (
         <Card collapsible defaultOpen={false}>
           <CardTitle
-            title="User preamble — full text"
+            title="Consignes courtes — texte entier"
             help={HELP.user_preamble}
             trailing={charCount(wf.pack_user_preamble)}
           />
@@ -664,7 +741,7 @@ export default function PicsouUseCaseCanvas() {
       {wf?.user_message_without_alien ? (
         <Card collapsible defaultOpen={false}>
           <CardTitle
-            title="Full user message — Alien off"
+            title="Devoir complet — Alien off"
             help={HELP.user_off}
             trailing={charCount(wf.user_message_without_alien)}
           />
@@ -677,7 +754,7 @@ export default function PicsouUseCaseCanvas() {
       {wf?.user_message_with_alien ? (
         <Card collapsible defaultOpen={false}>
           <CardTitle
-            title="Full user message — Alien on"
+            title="Devoir complet — Alien on"
             help={HELP.user_on}
             trailing={charCount(wf.user_message_with_alien)}
           />
@@ -690,7 +767,7 @@ export default function PicsouUseCaseCanvas() {
       {casesOff.length > 0 ? (
         <Card collapsible defaultOpen={false}>
           <CardTitle
-            title="Evidence index — Alien off"
+            title="Liste des papiers — Alien off"
             help={HELP.evidence_index}
             trailing={\`\${casesOff.length} cases\`}
           />
@@ -711,7 +788,7 @@ export default function PicsouUseCaseCanvas() {
       {casesOn.length > 0 ? (
         <Card collapsible defaultOpen={false}>
           <CardTitle
-            title="Evidence index — Alien on"
+            title="Liste des papiers — Alien on"
             help={HELP.evidence_index}
             trailing={\`\${casesOn.length} cases\`}
           />
@@ -734,7 +811,7 @@ export default function PicsouUseCaseCanvas() {
       <Row gap={8} style={{ alignItems: "center" }}>
         <Callout
           tone={winner ? "success" : "warning"}
-          title={winner ? "Recommendation" : "No eligible winner"}
+          title={winner ? "Recommandation" : "Pas de gagnant éligible"}
         >
           {UC.recommendation_text}
         </Callout>
@@ -743,7 +820,7 @@ export default function PicsouUseCaseCanvas() {
 
       {UC.why ? (
         <Row gap={8} style={{ alignItems: "flex-start" }}>
-          <Callout tone="info" title="Why this winner">
+          <Callout tone="info" title="Pourquoi ce gagnant">
             {UC.why}
           </Callout>
           <InfoTip text={HELP.why} />
@@ -752,7 +829,7 @@ export default function PicsouUseCaseCanvas() {
 
       {cal ? (
         <Card>
-          <CardTitle title="Score calibration" help={HELP.calibration} />
+          <CardTitle title="Contrôle des notes" help={HELP.calibration} />
           <CardBody>
             <Stack gap={10}>
               <Table
@@ -819,8 +896,8 @@ export default function PicsouUseCaseCanvas() {
       {valence ? (
         <Stack gap={10}>
           <SectionTitle
-            title="Winner scorecard"
-            help="Big numbers for the recommended cell. Hover each i."
+            title="Bulletin du gagnant"
+            help="Grands chiffres pour la cellule recommandée. Survole chaque i."
           />
           <Grid columns={6} gap={14}>
             <Metric
@@ -872,7 +949,7 @@ export default function PicsouUseCaseCanvas() {
 
       {valence?.vs_runner_up ? (
         <Card>
-          <CardTitle title="Vs runner-up" help={HELP.runner_up} />
+          <CardTitle title="Face au 2e" help={HELP.runner_up} />
           <CardBody>
             <Table
               headers={["", "Winner", "Runner-up"]}
@@ -914,40 +991,56 @@ export default function PicsouUseCaseCanvas() {
 
       <Stack gap={8}>
         <SectionTitle
-          title="Composite score by cell"
+          title="Note globale (composite) par cellule"
           help={HELP.chart_composite}
-          subtitle="Higher bar = better mix of correct + cheap + fast for this job."
+          subtitle="Axe Y = composite. Plus haut = meilleur mélange juste + économe + rapide."
         />
         <BarChart
           categories={categories}
           series={[{ name: "Composite", data: composites, tone: "info" }]}
-          height={220}
+          height={240}
+          horizontal
           showValues
         />
       </Stack>
 
       <Stack gap={8}>
         <SectionTitle
-          title="Quality by cell"
+          title="Exactitude (qualité %) par cellule"
           help={HELP.chart_quality}
-          subtitle="Correctness only (0–1). Cost and speed ignored here."
+          subtitle={\`Axe Y = qualité en %. Ligne \${qualityFloorPct}% = barre pour être recommandé.\`}
         />
+        <Row gap={6} style={{ alignItems: "center" }}>
+          <Text size="small" tone="secondary">
+            Barre de passage
+          </Text>
+          <InfoTip text={HELP.quality_bar} />
+        </Row>
         <BarChart
           categories={categories}
-          series={[{ name: "Quality", data: quality, tone: "success" }]}
-          height={200}
+          series={[{ name: "Qualité %", data: qualityPct, tone: "success" }]}
+          height={240}
+          horizontal
           yMin={0}
-          yMax={1}
+          yMax={100}
+          valueSuffix="%"
           showValues
+          referenceLines={[
+            {
+              value: qualityFloorPct,
+              label: \`Barre \${qualityFloorPct}%\`,
+              tone: "warning",
+            },
+          ]}
         />
       </Stack>
 
       {delta.length > 0 ? (
         <Stack gap={8}>
           <SectionTitle
-            title="Alien valence (quality)"
+            title="Effet Alien sur la qualité (%)"
             help={HELP.chart_alien_q}
-            subtitle="Same model · without Alien vs with Alien. Gap = Alien lift."
+            subtitle="Axe Y = qualité %. Même modèle · sans Alien vs avec Alien."
           />
           <Row gap={6} style={{ alignItems: "center" }}>
             <Text size="small" tone="secondary">
@@ -958,13 +1051,25 @@ export default function PicsouUseCaseCanvas() {
           <BarChart
             categories={deltaModels}
             series={[
-              { name: "Without Alien", data: withoutAlien, tone: "neutral" },
-              { name: "With Alien", data: withAlien, tone: "success" },
+              {
+                name: "Sans Alien",
+                data: withoutAlienPct,
+                tone: "neutral",
+              },
+              { name: "Avec Alien", data: withAlienPct, tone: "success" },
             ]}
-            height={220}
+            height={240}
             yMin={0}
-            yMax={1}
+            yMax={100}
+            valueSuffix="%"
             showValues
+            referenceLines={[
+              {
+                value: qualityFloorPct,
+                label: \`Barre \${qualityFloorPct}%\`,
+                tone: "warning",
+              },
+            ]}
           />
         </Stack>
       ) : null}
@@ -972,21 +1077,21 @@ export default function PicsouUseCaseCanvas() {
       {delta.length > 0 ? (
         <Stack gap={8}>
           <SectionTitle
-            title="Alien valence (tokens)"
+            title="Effet Alien sur les tokens"
             help={HELP.chart_alien_t}
-            subtitle="Did Alien notes make the packet longer? Check if quality rose enough."
+            subtitle="Axe Y = tokens totaux. Alien allonge-t-il le repas ?"
           />
           <BarChart
             categories={deltaModels}
             series={[
               {
-                name: "Without Alien",
+                name: "Sans Alien",
                 data: tokenWithoutAlien,
                 tone: "neutral",
               },
-              { name: "With Alien", data: tokenWithAlien, tone: "warning" },
+              { name: "Avec Alien", data: tokenWithAlien, tone: "warning" },
             ]}
-            height={200}
+            height={220}
             showValues
           />
         </Stack>
@@ -994,25 +1099,33 @@ export default function PicsouUseCaseCanvas() {
 
       <Grid columns={2} gap={18}>
         <Stack gap={8}>
-          <SectionTitle title="Cost (µ$)" help={HELP.chart_cost} level={3} />
+          <SectionTitle
+            title="Coût estimé (µ$)"
+            help={HELP.chart_cost}
+            level={3}
+            subtitle="Axe Y = micro-dollars."
+          />
           <BarChart
             categories={categories}
-            series={[{ name: "Cost (µ$)", data: costMicros, tone: "warning" }]}
-            height={200}
+            series={[{ name: "Coût (µ$)", data: costMicros, tone: "warning" }]}
+            height={220}
+            horizontal
             valueSuffix=" µ$"
             showValues
           />
         </Stack>
         <Stack gap={8}>
           <SectionTitle
-            title="Latency (ms)"
+            title="Temps de réponse (ms)"
             help={HELP.chart_latency}
             level={3}
+            subtitle="Axe Y = millisecondes. 1000 ms = 1 seconde."
           />
           <BarChart
             categories={categories}
             series={[{ name: "Latency", data: latency, tone: "info" }]}
-            height={200}
+            height={220}
+            horizontal
             valueSuffix=" ms"
             showValues
           />
@@ -1021,7 +1134,7 @@ export default function PicsouUseCaseCanvas() {
 
       <Card>
         <CardTitle
-          title="Full ranking"
+          title="Classement complet"
           help={HELP.ranking}
           trailing={\`\${rows.length} cells\`}
         />
@@ -1074,7 +1187,7 @@ export default function PicsouUseCaseCanvas() {
 
       {UC.limitations.length > 0 ? (
         <Row gap={8} style={{ alignItems: "flex-start" }}>
-          <Callout tone="neutral" title="Limits">
+          <Callout tone="neutral" title="Limites honnêtes">
             {UC.limitations.join(" · ")}
           </Callout>
           <InfoTip text={HELP.limits} />
@@ -1126,11 +1239,13 @@ function renderIndexCanvas(useCases, reportMeta) {
 
   const dataLiteral = JSON.stringify(payload, null, 2);
   return `import {
+  BarChart,
   Callout,
   Card,
   CardBody,
   CardHeader,
   Code,
+  Grid,
   H1,
   H2,
   H3,
@@ -1149,12 +1264,29 @@ const INDEX = ${dataLiteral} as const;
 ${SHARED_UI}
 
 export default function PicsouIndexCanvas() {
+  const jobs = [...INDEX.use_cases];
+  const jobLabels = jobs.map((uc) =>
+    String(uc.title || uc.id)
+      .replace(/^Nightmare:\\s*/i, "")
+      .slice(0, 42),
+  );
+  const winnerQualityPct = jobs.map((uc) =>
+    uc.quality == null
+      ? 0
+      : Math.round(Number(uc.quality) * 1000) / 10,
+  );
+  const winnerLift = jobs.map((uc) =>
+    uc.alien_lift == null
+      ? 0
+      : Math.round(Number(uc.alien_lift) * 1000) / 1000,
+  );
+
   return (
     <Stack gap={20} style={{ padding: 24 }}>
       <PageTitle
-        title="Picsou — use-case index"
+        title="Picsou — carte des devoirs"
         help={HELP.picsou}
-        subtitle={\`Map of every job · \${INDEX.track} · \${INDEX.mode} · \${INDEX.generated_at}\`}
+        subtitle={\`Tous les jobs · \${INDEX.track} · \${INDEX.mode} · \${INDEX.generated_at}\`}
         pills={
           <>
             <Pill>{INDEX.track}</Pill>
@@ -1166,42 +1298,82 @@ export default function PicsouIndexCanvas() {
 
       <LegendBanner />
 
+      <StoryBoard />
+
       <Callout tone="info" title="Comment lire Picsou">
         <Text style={{ lineHeight: 1.5 }}>
           Survole ou clique un <Text weight="semibold">i</Text> — la légende
-          s'affiche dans le bandeau au-dessus. Ouvre un canvas use-case pour
-          les graphes. Déplie les prompts pour le texte entier.
+          s'affiche dans le bandeau. Regarde d'abord les graphiques, puis ouvre
+          un canvas use-case pour le détail d'un devoir.
         </Text>
       </Callout>
 
+      <Stack gap={8}>
+        <SectionTitle
+          title="Qualité du gagnant par devoir (%)"
+          help={HELP.chart_index_quality}
+          subtitle="Axe Y = qualité %. Un bar = un devoir. Ligne 75% = barre de passage."
+        />
+        <BarChart
+          categories={jobLabels}
+          series={[
+            { name: "Qualité gagnant %", data: winnerQualityPct, tone: "success" },
+          ]}
+          height={220}
+          yMin={0}
+          yMax={100}
+          valueSuffix="%"
+          showValues
+          referenceLines={[
+            { value: 75, label: "Barre 75%", tone: "warning" },
+          ]}
+        />
+      </Stack>
+
+      <Stack gap={8}>
+        <SectionTitle
+          title="Alien lift du gagnant par devoir"
+          help={HELP.chart_index_lift}
+          subtitle="Axe Y = delta qualité (avec Alien − sans Alien) pour le modèle gagnant."
+        />
+        <BarChart
+          categories={jobLabels}
+          series={[
+            { name: "Alien lift", data: winnerLift, tone: "info" },
+          ]}
+          height={200}
+          showValues
+        />
+      </Stack>
+
       <Card>
-        <CardTitle title="Recommendations" help={HELP.index} />
+        <CardTitle title="Recommandations" help={HELP.index} />
         <CardBody>
           <Stack gap={10}>
             <Row gap={6} style={{ alignItems: "center", flexWrap: "wrap" }}>
               <Text size="small" tone="secondary">
-                Column tips
+                Infobulles colonnes
               </Text>
               <InfoTip text={HELP.quality} />
               <InfoTip text={HELP.oracle} />
               <InfoTip text={HELP.reference} />
               <InfoTip text={HELP.tokens} />
               <InfoTip text={HELP.alien} />
-              <InfoTip text="Trials = how many times we repeated the run. More trials = more trust." />
-              <InfoTip text="Confidence = how sure Picsou is. demo-low = fixture; low/medium/high need live repeats with stable quality." />
+              <InfoTip text="Trials = combien de fois on a répété. Plus = plus de confiance." />
+              <InfoTip text="Confidence = confiance. demo-low = démo fixture, pas preuve production." />
             </Row>
             <Table
               headers={[
-                "Use case",
-                "Winner",
+                "Devoir",
+                "Gagnant",
                 "Alien",
-                "Quality",
+                "Qualité",
                 "Oracle",
-                "Reference",
+                "Référence",
                 "Tokens",
                 "Trials",
                 "Confidence",
-                "Canvas file",
+                "Canvas",
               ]}
               rows={INDEX.use_cases.map((uc) => [
                 uc.title,
@@ -1223,9 +1395,9 @@ export default function PicsouIndexCanvas() {
       </Card>
 
       <SectionTitle
-        title="Full prompts"
+        title="Textes exacts notés"
         help={HELP.prompts_section}
-        subtitle="Click a card header to open the exact text scored for that job."
+        subtitle="Clique un en-tête de carte pour ouvrir le texte scoré."
       />
 
       {INDEX.use_cases.map((uc) => (
@@ -1248,7 +1420,7 @@ export default function PicsouIndexCanvas() {
           {uc.prompt_system ? (
             <Card collapsible defaultOpen={false}>
               <CardTitle
-                title={\`System prompt — \${uc.id}\`}
+                title={\`Règles du prof — \${uc.id}\`}
                 help={HELP.system_prompt}
                 trailing={charCount(uc.prompt_system)}
               />
@@ -1265,7 +1437,7 @@ export default function PicsouIndexCanvas() {
           {uc.user_message_without_alien ? (
             <Card collapsible defaultOpen={false}>
               <CardTitle
-                title={\`Full user message — Alien off — \${uc.id}\`}
+                title={\`Devoir complet — Alien off — \${uc.id}\`}
                 help={HELP.user_off}
                 trailing={charCount(uc.user_message_without_alien)}
               />
@@ -1277,7 +1449,7 @@ export default function PicsouIndexCanvas() {
           {uc.user_message_with_alien ? (
             <Card collapsible defaultOpen={false}>
               <CardTitle
-                title={\`Full user message — Alien on — \${uc.id}\`}
+                title={\`Devoir complet — Alien on — \${uc.id}\`}
                 help={HELP.user_on}
                 trailing={charCount(uc.user_message_with_alien)}
               />
