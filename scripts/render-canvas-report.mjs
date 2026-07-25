@@ -1188,7 +1188,7 @@ export default function PicsouIndexCanvas() {
               <InfoTip text={HELP.tokens} />
               <InfoTip text={HELP.alien} />
               <InfoTip text="Trials = how many times we repeated the run. More trials = more trust." />
-              <InfoTip text="Confidence = how sure Picsou is. demo-low means fixture demo, not production proof." />
+              <InfoTip text="Confidence = how sure Picsou is. demo-low = fixture; low/medium/high need live repeats with stable quality." />
             </Row>
             <Table
               headers={[

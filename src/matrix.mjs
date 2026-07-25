@@ -679,17 +679,18 @@ export async function runEvalMatrix({
       ? [
           "MVP fixture matrix: Alien packets are frozen Alien-URL mirrors, not live MCP calls.",
           "Live model serving (Brev/SGLang + Grok API) not required for --fixture.",
-          requestedTrials < 2
-            ? "Confidence remains demo-low until --trials repeats the matrix."
-            : "Fixture trials use deterministic mutation noise; confidence stays demo-low until live repeats.",
+          "Fixture confidence stays demo-low; live + --trials unlocks low (≥2), medium (≥5), high (≥10).",
+          requestedTrials >= 2
+            ? "Fixture trials use deterministic mutation noise; confidence stays demo-low until live repeats."
+            : "Use evaluate:matrix:live -- --trials N for low/medium/high confidence.",
         ]
       : [
           "Live matrix: Gemma/Ministral/DeepSeek via PICSOU_ENDPOINT_* (Brev/SGLang); Grok via XAI_API_KEY or ~/.grok/auth.json when x.ai is used.",
           "Models missing from an endpoint are skipped, not invented.",
           "Alien packets remain frozen mirrors in this MVP (not live MCP).",
           requestedTrials < 2
-            ? "Confidence remains demo-low until --trials repeats the matrix."
-            : "Live trials at temperature 0; residual variance is timing/usage unless the provider is non-deterministic.",
+            ? "Confidence stays demo-low until --trials ≥ 2 (then low/medium/high by stability)."
+            : "Live trials at temperature 0; residual variance is timing/usage unless the provider is non-deterministic. Ladder: low≥2, medium≥5+stable, high≥10+stable.",
         ],
   };
   report.calibration_summary = formatCalibrationSummary(report);

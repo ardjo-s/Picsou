@@ -135,6 +135,14 @@ export function deriveConfidence({
 }) {
   if (fixture || trialsRequested < 2) return "demo-low";
   if (
+    trialsRequested >= 10 &&
+    allCellsCompleted &&
+    Number.isFinite(winnerQualityStdev) &&
+    winnerQualityStdev <= 0.02
+  ) {
+    return "high";
+  }
+  if (
     trialsRequested >= 5 &&
     allCellsCompleted &&
     Number.isFinite(winnerQualityStdev) &&
