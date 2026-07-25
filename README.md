@@ -1,4 +1,4 @@
-# Picsou Router
+# Picsou
 
 <p align="center">
   <img src="docs/assets/piscou-banner.jpg" alt="Piscou — small but sturdy" width="1024" />
