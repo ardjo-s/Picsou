@@ -1,0 +1,33 @@
+{
+  "workflow_version": "1.0.0",
+  "results": [
+    {
+      "case_id": "lead-001",
+      "title": "Acme Corp — procurement pilot request",
+      "decision": "approve",
+      "evidence": {
+        "source_id": "snippet-1",
+        "source_url": "https://example.com/inbox/lead-001",
+        "evidence_quote": "budget approved for a Q3 pilot",
+        "confidence": 0.95
+      }
+    },
+    {
+      "case_id": "lead-002",
+      "title": "Student thesis on attention routing",
+      "decision": "reject",
+      "evidence": null
+    },
+    {
+      "case_id": "lead-003",
+      "title": "Regional clinic — workflow automation",
+      "decision": "approve",
+      "evidence": {
+        "source_id": "snippet-3a",
+        "source_url": "https://example.com/inbox/lead-003",
+        "evidence_quote": "manual triage burns nursing hours",
+        "confidence": 0.88
+      }
+    }
+  ]
+}

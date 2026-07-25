@@ -1,21 +1,35 @@
 import { scoreDocument } from "../scripts/score.mjs";
+import {
+  contractForScenario,
+  contractForScenarioId,
+  oracleMeaning,
+} from "./contract.mjs";
 
-export function scoreMetricsFromResult(score) {
+export function scoreMetricsFromResult(score, contract) {
   if (!score) return null;
-  return {
-    priority_accuracy: score.priority_accuracy,
-    attention_fit_accuracy: score.attention_fit_accuracy,
-    signal_f1: score.signal_f1,
-    evidence_exactness: score.evidence_exactness,
-  };
+  const keys = contract?.calibration?.metric_keys || [
+    "priority_accuracy",
+    "attention_fit_accuracy",
+    "signal_f1",
+    "evidence_exactness",
+  ];
+  const metrics = {};
+  for (const key of keys) {
+    if (score[key] != null) metrics[key] = score[key];
+  }
+  return metrics;
 }
 
-export function qualityFormulaFromBenchmark(benchmark) {
+export function qualityFormulaFromBenchmark(benchmark, contract) {
   const scoring = benchmark?.scoring || {};
+  const evidenceTerm =
+    contract?.scorer_id === "decision-v1"
+      ? "evidence_exactness"
+      : "evidence_exactness * signal_f1";
   return {
     weights: scoring.quality_components || {},
     minimum_to_recommend: scoring.minimum_quality_to_recommend ?? 0.75,
-    evidence_term: "evidence_exactness * signal_f1",
+    evidence_term: evidenceTerm,
     recommendation_components: scoring.recommendation_components || {},
   };
 }
@@ -51,6 +65,7 @@ export async function buildScenarioCalibration({
   benchmark,
   modelsConfig,
   scorePerfect,
+  contract,
 }) {
   const oracleScore = scorePerfect;
   const referenceModelId = pickReferenceModelId(modelsConfig);
@@ -70,13 +85,13 @@ export async function buildScenarioCalibration({
 
   return {
     scenario_id: scenarioId,
+    workflow_id: contract?.id || null,
     oracle: {
       source: "perfect-output",
       quality_score: oracleScore.quality_score,
       schema_valid: oracleScore.schema_valid,
-      metrics: scoreMetricsFromResult(oracleScore),
-      meaning:
-        "Theoretical ceiling: perfect triage + exact evidence on frozen ground truth for this scenario.",
+      metrics: scoreMetricsFromResult(oracleScore, contract),
+      meaning: oracleMeaning(contract),
     },
     reference_model: refCell
       ? {
@@ -86,7 +101,7 @@ export async function buildScenarioCalibration({
             alien: refCell.alien,
             quality_score: refCell.score.quality_score,
             composite_score: refCell.composite_score ?? null,
-            metrics: scoreMetricsFromResult(refCell.score),
+            metrics: scoreMetricsFromResult(refCell.score, contract),
             tokens: refCell.tokens ?? null,
           },
           meaning:
@@ -98,7 +113,7 @@ export async function buildScenarioCalibration({
           best_cell: null,
           meaning: "Reference model configured but no completed cell in this scenario.",
         },
-    quality_formula: qualityFormulaFromBenchmark(benchmark),
+    quality_formula: qualityFormulaFromBenchmark(benchmark, contract),
     worked_examples: [
       { label: "oracle", quality_score: 1.0, note: "perfect-output.json" },
       typicalFailure
@@ -119,11 +134,13 @@ export async function buildScenarioCalibration({
 }
 
 export async function scorePerfectForScenario(scenarioId, readJson) {
+  const contract = await contractForScenarioId(scenarioId, readJson);
   const base = `scenarios/${scenarioId}`;
   const perfect = await readJson(`${base}/perfect-output.json`);
   return scoreDocument(perfect, {
     casesPath: `${base}/cases.json`,
     truthPath: `${base}/ground-truth.json`,
+    contract,
   });
 }
 
@@ -165,7 +182,6 @@ export function formatCalibrationSummary(report) {
       .filter(Boolean);
     const refModel =
       report.scenarios[0]?.calibration?.reference_model?.model_id ?? "n/a";
-    // Range across all completed reference-model cells (Alien on/off), not only best.
     const refScores = report.scenarios
       .flatMap((scenario) =>
         (scenario.cells || [])

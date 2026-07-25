@@ -1,0 +1,49 @@
+{
+  "id": "your-workflow-id",
+  "version": "1.0.0",
+  "label": "Human-readable workflow name",
+  "scorer_id": "triage-v1",
+  "benchmark": {
+    "benchmark_id": "picsou-your-workflow-id",
+    "workflow_version": "1.0.0",
+    "scoring": {
+      "quality_components": {
+        "priority_accuracy": 0.55,
+        "evidence_exactness": 0.3,
+        "attention_fit_accuracy": 0.15
+      },
+      "recommendation_components": {
+        "quality": 0.55,
+        "cost_efficiency": 0.2,
+        "latency_efficiency": 0.15,
+        "token_efficiency": 0.1
+      },
+      "minimum_quality_to_recommend": 0.75
+    }
+  },
+  "packing": {
+    "preamble_lines": [
+      "Process every case in this packed {evidence_mode} packet.",
+      "workflow_version must be exactly {workflow_version}.",
+      "Return only the required structured JSON."
+    ],
+    "include_researcher_profile": false,
+    "record_fields": ["title"]
+  },
+  "fixture": {
+    "ops": {
+      "set_high": { "attention_fit": true, "priority": "high" },
+      "set_skip": {
+        "attention_fit": false,
+        "priority": "skip",
+        "clear_signals": true
+      }
+    },
+    "trial_ops": ["set_skip", "set_high"]
+  },
+  "calibration": {
+    "oracle_meaning": "Theoretical ceiling on your frozen ground truth.",
+    "metric_keys": ["priority_accuracy", "evidence_exactness"]
+  },
+  "output_shape_hint": "Describe the exact JSON shape models must return."
+}

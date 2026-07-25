@@ -1,6 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import {
+  DEFAULT_WORKFLOW_ID,
+  loadWorkflowContract,
+} from "../src/contract.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -16,17 +20,32 @@ function signalKey(signal) {
   return `${signal.source_id}::${signal.signal_type}`;
 }
 
-export async function scoreDocument(
-  output,
-  {
-    casesPath = "workflow/cases.json",
-    truthPath = "workflow/ground-truth.json",
-    benchmarkPath = "workflow/benchmark.json",
-  } = {},
-) {
+async function resolveContract(options = {}) {
+  if (options.contract) return options.contract;
+  if (options.workflowId) {
+    return loadWorkflowContract(options.workflowId, readJson);
+  }
+  if (options.contractPath) {
+    return readJson(options.contractPath);
+  }
+  if (options.benchmarkPath) {
+    return loadWorkflowContract(DEFAULT_WORKFLOW_ID, readJson);
+  }
+  return loadWorkflowContract(DEFAULT_WORKFLOW_ID, readJson);
+}
+
+function qualityFromMetrics(metrics, benchmark) {
+  const weights = benchmark.scoring.quality_components;
+  let qualityScore = 0;
+  for (const [key, weight] of Object.entries(weights)) {
+    qualityScore += (weight || 0) * (metrics[key] ?? 0);
+  }
+  return Number(qualityScore.toFixed(12));
+}
+
+async function scoreTriageV1(output, { casesPath, truthPath, benchmark }) {
   const casesDocument = await readJson(casesPath);
   const truthDocument = await readJson(truthPath);
-  const benchmark = await readJson(benchmarkPath);
   const cases = new Map(casesDocument.cases.map((item) => [item.case_id, item]));
   const truth = new Map(truthDocument.cases.map((item) => [item.case_id, item]));
   const errors = [];
@@ -164,13 +183,12 @@ export async function scoreDocument(
   const evidenceExactness = ratio(evidenceExact, Math.max(returnedSignals, 1));
   const attentionFitAccuracy = ratio(fitCorrect, cases.size);
   const priorityAccuracy = ratio(priorityCorrect, cases.size);
-  const weights = benchmark.scoring.quality_components;
-  // Blend signal F1 into evidence/priority story via evidence component already;
-  // priority_accuracy is the main decision metric.
   const qualityScore =
-    weights.priority_accuracy * priorityAccuracy +
-    weights.evidence_exactness * evidenceExactness * signalF1 +
-    weights.attention_fit_accuracy * attentionFitAccuracy;
+    benchmark.scoring.quality_components.priority_accuracy * priorityAccuracy +
+    benchmark.scoring.quality_components.evidence_exactness *
+      evidenceExactness *
+      signalF1 +
+    benchmark.scoring.quality_components.attention_fit_accuracy * attentionFitAccuracy;
 
   return {
     schema_valid: errors.length === 0,
@@ -187,9 +205,151 @@ export async function scoreDocument(
   };
 }
 
-export async function scoreFile(filePath) {
+async function scoreDecisionV1(output, { casesPath, truthPath, benchmark }) {
+  const casesDocument = await readJson(casesPath);
+  const truthDocument = await readJson(truthPath);
+  const cases = new Map(casesDocument.cases.map((item) => [item.case_id, item]));
+  const truth = new Map(truthDocument.cases.map((item) => [item.case_id, item]));
+  const errors = [];
+
+  if (output?.workflow_version !== casesDocument.workflow_version) {
+    errors.push("workflow_version does not match the benchmark.");
+  }
+  if (!Array.isArray(output?.results)) {
+    errors.push("results must be an array.");
+  }
+
+  const results = Array.isArray(output?.results) ? output.results : [];
+  const resultMap = new Map();
+  for (const result of results) {
+    if (!result || typeof result.case_id !== "string") {
+      errors.push("Every result requires a string case_id.");
+      continue;
+    }
+    if (resultMap.has(result.case_id)) {
+      errors.push(`Duplicate result for ${result.case_id}.`);
+    }
+    resultMap.set(result.case_id, result);
+  }
+
+  let decisionCorrect = 0;
+  let evidenceChecks = 0;
+  let evidenceExact = 0;
+
+  for (const [caseId, benchmarkCase] of cases) {
+    const expected = truth.get(caseId);
+    const result = resultMap.get(caseId);
+    if (!expected) {
+      errors.push(`Missing ground truth for ${caseId}.`);
+      continue;
+    }
+    if (!result) {
+      errors.push(`Missing result for ${caseId}.`);
+      continue;
+    }
+    if (result.title !== benchmarkCase.record.title) {
+      errors.push(`title mismatch for ${caseId}.`);
+    }
+    if (!["approve", "reject"].includes(result.decision)) {
+      errors.push(`decision invalid for ${caseId}.`);
+    } else if (result.decision === expected.expected_decision) {
+      decisionCorrect += 1;
+    }
+
+    if (expected.expected_decision === "approve") {
+      const evidence = result.evidence;
+      const sourceMap = new Map(
+        benchmarkCase.sources.map((source) => [source.source_id, source]),
+      );
+      const expectedSourceId = expected.expected_source_id;
+      if (!evidence || typeof evidence !== "object") {
+        errors.push(`approve case ${caseId} requires evidence.`);
+        continue;
+      }
+      evidenceChecks += 1;
+      const source = sourceMap.get(evidence.source_id);
+      if (!source) {
+        errors.push(`Unknown source_id ${evidence.source_id} in ${caseId}.`);
+      } else {
+        if (expectedSourceId && evidence.source_id !== expectedSourceId) {
+          errors.push(`expected source_id ${expectedSourceId} for ${caseId}.`);
+        }
+        if (evidence.source_url !== source.url) {
+          errors.push(`source_url mismatch for ${evidence.source_id}.`);
+        }
+        if (
+          typeof evidence.evidence_quote === "string" &&
+          evidence.evidence_quote.length >= 10 &&
+          source.text.includes(evidence.evidence_quote)
+        ) {
+          evidenceExact += 1;
+        } else {
+          errors.push(`evidence_quote is not exact for ${evidence.source_id}.`);
+        }
+      }
+      if (
+        typeof evidence.confidence !== "number" ||
+        evidence.confidence < 0 ||
+        evidence.confidence > 1
+      ) {
+        errors.push(`confidence is invalid for ${caseId}.`);
+      }
+    } else if (result.evidence != null) {
+      errors.push(`reject case ${caseId} should not include evidence.`);
+    }
+  }
+
+  for (const caseId of resultMap.keys()) {
+    if (!cases.has(caseId)) errors.push(`Unknown case_id ${caseId}.`);
+  }
+  if (results.length !== cases.size) {
+    errors.push(`Expected ${cases.size} results, received ${results.length}.`);
+  }
+
+  const decisionAccuracy = ratio(decisionCorrect, cases.size);
+  const evidenceExactness = ratio(evidenceExact, Math.max(evidenceChecks, 1));
+  const metrics = {
+    decision_accuracy: decisionAccuracy,
+    evidence_exactness: evidenceExactness,
+  };
+
+  return {
+    schema_valid: errors.length === 0,
+    ...metrics,
+    quality_score: qualityFromMetrics(metrics, benchmark),
+    errors,
+  };
+}
+
+export async function scoreDocument(
+  output,
+  {
+    casesPath = "workflow/cases.json",
+    truthPath = "workflow/ground-truth.json",
+    benchmarkPath = "workflow/benchmark.json",
+    contract = null,
+    workflowId = null,
+    contractPath = null,
+  } = {},
+) {
+  const resolvedContract = await resolveContract({
+    contract,
+    workflowId,
+    contractPath,
+    benchmarkPath,
+  });
+  const benchmark = resolvedContract.benchmark;
+  const ctx = { casesPath, truthPath, benchmark, contract: resolvedContract };
+
+  if (resolvedContract.scorer_id === "decision-v1") {
+    return scoreDecisionV1(output, ctx);
+  }
+  return scoreTriageV1(output, ctx);
+}
+
+export async function scoreFile(filePath, options = {}) {
   const absolutePath = path.resolve(process.cwd(), filePath);
-  return scoreDocument(JSON.parse(await fs.readFile(absolutePath, "utf8")));
+  return scoreDocument(JSON.parse(await fs.readFile(absolutePath, "utf8")), options);
 }
 
 const invokedAsScript =

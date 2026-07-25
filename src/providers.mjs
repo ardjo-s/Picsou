@@ -12,11 +12,7 @@ export function extractJson(text) {
   return JSON.parse(candidate);
 }
 
-/**
- * Some models emit flat evidence fields instead of signals[].
- * Lift them into schema-shaped signals before scoring.
- */
-export function normalizeOutput(document) {
+function normalizeTriageOutput(document) {
   if (!document || !Array.isArray(document.results)) return document;
   const results = document.results.map((result) => {
     if (!result || typeof result !== "object") return result;
@@ -57,7 +53,6 @@ export function normalizeOutput(document) {
       }
     }
 
-    // Gemma sometimes emits "low" instead of schema enum "skip".
     if (priority === "low" || priority === "none") priority = "skip";
     if (attention_fit === false) {
       priority = "skip";
@@ -69,7 +64,49 @@ export function normalizeOutput(document) {
   return { ...document, results };
 }
 
-const OUTPUT_SHAPE_HINT = `
+function normalizeDecisionOutput(document) {
+  if (!document || !Array.isArray(document.results)) return document;
+  const results = document.results.map((result) => {
+    if (!result || typeof result !== "object") return result;
+
+    let { case_id, title, decision, evidence } = result;
+    if (decision === "approved") decision = "approve";
+    if (decision === "rejected") decision = "reject";
+
+    if (!evidence || typeof evidence !== "object") {
+      const { source_id, source_url, evidence_quote, confidence } = result;
+      if (
+        decision === "approve" &&
+        typeof source_id === "string" &&
+        typeof evidence_quote === "string" &&
+        evidence_quote.length >= 10
+      ) {
+        evidence = {
+          source_id,
+          source_url,
+          evidence_quote,
+          confidence: typeof confidence === "number" ? confidence : 0.5,
+        };
+      } else if (decision === "reject") {
+        evidence = null;
+      }
+    }
+
+    return { case_id, title, decision, evidence: decision === "reject" ? null : evidence };
+  });
+  return { ...document, results };
+}
+
+/**
+ * Normalize provider JSON to the workflow contract shape before scoring.
+ */
+export function normalizeOutput(document, contract) {
+  const scorerId = contract?.scorer_id || "triage-v1";
+  if (scorerId === "decision-v1") return normalizeDecisionOutput(document);
+  return normalizeTriageOutput(document);
+}
+
+const DEFAULT_OUTPUT_SHAPE_HINT = `
 Return ONLY JSON with this shape (no markdown):
 {
   "workflow_version": "1.0.0",
@@ -93,6 +130,10 @@ Return ONLY JSON with this shape (no markdown):
 }
 Rules: results length must equal case count. priority MUST be high|medium|skip (never low). signals MUST be an array. Use [] and priority skip when attention_fit is false. signal_type is one of relevance_hook|method_signal|impact_claim. evidence_quote must be an exact substring (≥10 chars) of the matching source text.
 `.trim();
+
+export function outputShapeHint(contract) {
+  return contract?.output_shape_hint?.trim() || DEFAULT_OUTPUT_SHAPE_HINT;
+}
 
 export function createOpenAICompatibleProvider({
   baseUrl,
@@ -134,7 +175,7 @@ export function createOpenAICompatibleProvider({
             { role: "system", content: pack.system },
             {
               role: "user",
-              content: `${pack.user}\n\n${OUTPUT_SHAPE_HINT}`,
+              content: `${pack.user}\n\n${outputShapeHint(pack.contract)}`,
             },
           ],
         }),
@@ -157,7 +198,7 @@ export function createOpenAICompatibleProvider({
           }
         : null;
       return {
-        output: normalizeOutput(extractJson(content)),
+        output: normalizeOutput(extractJson(content), pack.contract),
         usage,
         latency_ms: Math.max(1, Date.now() - started),
       };

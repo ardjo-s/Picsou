@@ -1,0 +1,51 @@
+{
+  "workflow_version": "1.0.0",
+  "evidence_mode": "frozen_inbound_snippets",
+  "cases": [
+    {
+      "case_id": "lead-001",
+      "record": {
+        "title": "Acme Corp — procurement pilot request",
+        "segment": "enterprise",
+        "intent_hint": "budget_owner"
+      },
+      "sources": [
+        {
+          "source_id": "snippet-1",
+          "url": "https://example.com/inbox/lead-001",
+          "text": "We have budget approved for a Q3 pilot and need pricing by Friday for 200 seats."
+        }
+      ]
+    },
+    {
+      "case_id": "lead-002",
+      "record": {
+        "title": "Student thesis on attention routing",
+        "segment": "academic",
+        "intent_hint": "research_only"
+      },
+      "sources": [
+        {
+          "source_id": "snippet-2",
+          "url": "https://example.com/inbox/lead-002",
+          "text": "I'm writing an undergrad thesis and would love a free account for citations."
+        }
+      ]
+    },
+    {
+      "case_id": "lead-003",
+      "record": {
+        "title": "Regional clinic — workflow automation",
+        "segment": "healthcare",
+        "intent_hint": "unclear"
+      },
+      "sources": [
+        {
+          "source_id": "snippet-3a",
+          "url": "https://example.com/inbox/lead-003",
+          "text": "Our clinic schedules 400 visits weekly and manual triage burns nursing hours."
+        }
+      ]
+    }
+  ]
+}

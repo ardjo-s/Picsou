@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { scoreDocument, scoreFile } from "./score.mjs";
+import { contractForScenario } from "../src/contract.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
@@ -125,11 +126,15 @@ for (const scenario of manifest.scenarios) {
     await fs.access(path.join(base, "fixture-behavior.json"));
   }
   const perfectPath = path.join(base, "perfect-output.json");
+  const contract = await contractForScenario(scenario, async (relativePath) =>
+    JSON.parse(await fs.readFile(path.join(ROOT, relativePath), "utf8")),
+  );
   const scored = await scoreDocument(
     JSON.parse(await fs.readFile(perfectPath, "utf8")),
     {
       casesPath: path.join("scenarios", scenario.id, "cases.json"),
       truthPath: path.join("scenarios", scenario.id, "ground-truth.json"),
+      contract,
     },
   );
   assert.equal(

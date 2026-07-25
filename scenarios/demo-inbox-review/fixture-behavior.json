@@ -1,0 +1,18 @@
+{
+  "scenario_id": "demo-inbox-review",
+  "note": "Gemma without Alien misses lead-003 budget signal; Alien mirror adds CFO snippet.",
+  "mutations": {
+    "false": {
+      "slm_under_test": ["set_reject:lead-003"],
+      "larger_baseline": ["set_reject:lead-002"],
+      "external_control": ["set_approve:lead-002"],
+      "reference_ceiling": []
+    },
+    "true": {
+      "slm_under_test": [],
+      "larger_baseline": [],
+      "external_control": ["set_reject:lead-003"],
+      "reference_ceiling": []
+    }
+  }
+}

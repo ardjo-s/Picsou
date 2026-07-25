@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { scoreDocument } from "../scripts/score.mjs";
-import { annotatePackStats, packContext } from "./context.mjs";
+import { annotatePackStats, packContext, packPreambleText } from "./context.mjs";
 import { createLiveProviderRouter } from "./providers.mjs";
 import {
   aggregateTokens,
@@ -17,6 +17,12 @@ import {
   formatCalibrationSummary,
   scorePerfectForScenario,
 } from "./calibration.mjs";
+import {
+  benchmarkFromContract,
+  contractForScenario,
+  contractForScenarioId,
+  resolveWorkflowId,
+} from "./contract.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -28,7 +34,7 @@ function scenarioDir(scenarioId) {
   return path.join("scenarios", scenarioId);
 }
 
-function alignOutputUrls(output, casesDocument) {
+function alignOutputUrls(output, casesDocument, contract) {
   const urlBySource = new Map();
   for (const item of casesDocument.cases) {
     for (const source of item.sources) {
@@ -36,7 +42,14 @@ function alignOutputUrls(output, casesDocument) {
     }
   }
   const aligned = structuredClone(output);
+  const scorerId = contract?.scorer_id || "triage-v1";
   for (const result of aligned.results) {
+    if (scorerId === "decision-v1") {
+      if (result.evidence?.source_id && urlBySource.has(result.evidence.source_id)) {
+        result.evidence.source_url = urlBySource.get(result.evidence.source_id);
+      }
+      continue;
+    }
     for (const signal of result.signals || []) {
       if (urlBySource.has(signal.source_id)) {
         signal.source_url = urlBySource.get(signal.source_id);
@@ -46,24 +59,29 @@ function alignOutputUrls(output, casesDocument) {
   return aligned;
 }
 
-/** Apply fixture mutation ops like set_high:case_id onto a perfect output. */
-function applyFixtureMutations(perfect, mutations = []) {
+function applyFixturePatch(row, patch) {
+  if (!patch || typeof patch !== "object") return;
+  if (patch.clear_signals) row.signals = [];
+  if (patch.clear_evidence) row.evidence = null;
+  for (const [key, value] of Object.entries(patch)) {
+    if (key === "clear_signals" || key === "clear_evidence") continue;
+    row[key] = value;
+  }
+}
+
+/** Apply fixture mutation ops from the workflow contract onto a perfect output. */
+function applyFixtureMutations(perfect, mutations = [], contract) {
+  const ops = contract?.fixture?.ops || {
+    set_high: { attention_fit: true, priority: "high" },
+    set_medium: { attention_fit: true, priority: "medium" },
+    set_skip: { attention_fit: false, priority: "skip", clear_signals: true },
+  };
   const output = structuredClone(perfect);
   for (const op of mutations) {
     const [action, caseId] = String(op).split(":");
     const row = output.results.find((item) => item.case_id === caseId);
-    if (!row) continue;
-    if (action === "set_high") {
-      row.attention_fit = true;
-      row.priority = "high";
-    } else if (action === "set_medium") {
-      row.attention_fit = true;
-      row.priority = "medium";
-    } else if (action === "set_skip") {
-      row.attention_fit = false;
-      row.priority = "skip";
-      row.signals = [];
-    }
+    if (!row || !ops[action]) continue;
+    applyFixturePatch(row, ops[action]);
   }
   return output;
 }
@@ -83,17 +101,27 @@ function hashString(input) {
 }
 
 /** Deterministic extra fixture mutations so repeated trials vary. */
-function fixtureTrialExtraMutations(scenarioId, model, alien, trialIndex, casesDocument) {
+function fixtureTrialExtraMutations(
+  scenarioId,
+  model,
+  alien,
+  trialIndex,
+  casesDocument,
+  contract,
+) {
   if (trialIndex === 0) return [];
   const caseIds = casesDocument.cases.map((item) => item.case_id);
   if (!caseIds.length) return [];
+  const trialOps = contract?.fixture?.trial_ops || [
+    "set_skip",
+    "set_medium",
+    "set_high",
+  ];
   const key = `${scenarioId}:${model.id}:${alien}:${trialIndex}`;
   const h = hashString(key);
   const target = caseIds[h % caseIds.length];
-  const mod = trialIndex % 3;
-  if (mod === 0) return [`set_skip:${target}`];
-  if (mod === 1) return [`set_medium:${target}`];
-  return [`set_high:${target}`];
+  const action = trialOps[trialIndex % trialOps.length] || trialOps[0];
+  return [`${action}:${target}`];
 }
 
 function finalizeCellFromTrials(trialRuns, keepTrials) {
@@ -196,14 +224,17 @@ async function loadScenario(scenarioId, alien) {
 
 async function runCell({
   scenarioId,
+  scenarioMeta,
   model,
   alien,
   fixture,
   router,
   trialIndex = 0,
 }) {
+  const contract =
+    scenarioMeta?.contract || (await contractForScenarioId(scenarioId, readJson));
   const loaded = await loadScenario(scenarioId, alien);
-  const pack = annotatePackStats(packContext(loaded.cases, loaded.prompt));
+  const pack = annotatePackStats(packContext(loaded.cases, loaded.prompt, contract));
   const started = Date.now();
 
   try {
@@ -213,7 +244,7 @@ async function runCell({
     let provider_name = "fixture";
 
     if (fixture) {
-      const baseOutput = alignOutputUrls(loaded.perfect, loaded.cases);
+      const baseOutput = alignOutputUrls(loaded.perfect, loaded.cases, contract);
       const behavior = await loadFixtureBehavior(scenarioId);
       const axis = alien ? "true" : "false";
       const roleKey = fixtureBehaviorRoleKey(model.role);
@@ -229,12 +260,14 @@ async function runCell({
             alien,
             trialIndex,
             loaded.cases,
+            contract,
           )
         : [];
-      output = applyFixtureMutations(baseOutput, [
-        ...mutations,
-        ...trialMutations,
-      ]);
+      output = applyFixtureMutations(
+        baseOutput,
+        [...mutations, ...trialMutations],
+        contract,
+      );
       usage = fixtureUsage(model, pack.stats, alien);
       if (trialIndex > 0) {
         usage = {
@@ -259,6 +292,7 @@ async function runCell({
     const score = await scoreDocument(output, {
       casesPath: loaded.casesPath,
       truthPath: loaded.truthPath,
+      contract,
     });
     const pricing = await readJson("config/model-pricing.json");
     const price = pricing.models[model.id];
@@ -372,7 +406,8 @@ async function evaluateScenario(
   scenarioMeta,
   { fixture, router, runnable, skipped, trials = 1, keepTrials = false, modelsConfig },
 ) {
-  const benchmark = await readJson("workflow/benchmark.json");
+  const contract = await contractForScenario(scenarioMeta, readJson);
+  const benchmark = benchmarkFromContract(contract);
   const workflow = { benchmark };
   const base = scenarioDir(scenarioMeta.id);
   const [prompt, casesPlain, casesAlien] = await Promise.all([
@@ -380,24 +415,20 @@ async function evaluateScenario(
     readJson(`${base}/cases.json`),
     readJson(`${base}/cases.alien.json`),
   ]);
-  const packOff = annotatePackStats(packContext(casesPlain, prompt));
-  const packOn = annotatePackStats(packContext(casesAlien, prompt));
+  const packOff = annotatePackStats(packContext(casesPlain, prompt, contract));
+  const packOn = annotatePackStats(packContext(casesAlien, prompt, contract));
   const workflow_evaluated = {
     scenario_id: scenarioMeta.id,
+    workflow_id: resolveWorkflowId(scenarioMeta),
     title: scenarioMeta.title,
     actor: scenarioMeta.actor || null,
     hard: Boolean(scenarioMeta.hard),
     nightmare: Boolean(scenarioMeta.nightmare),
     prompt_path: `${base}/prompt.md`,
-    // Exact messages scored — expand in canvas to read in full.
     prompt_system: prompt,
     user_message_without_alien: packOff.user,
     user_message_with_alien: packOn.user,
-    pack_user_preamble: [
-      `Triage every case in this packed ${casesPlain.evidence_mode || "evidence"} packet.`,
-      `workflow_version must be exactly ${casesPlain.workflow_version}.`,
-      "Return only the required structured JSON.",
-    ].join("\n"),
+    pack_user_preamble: packPreambleText(casesPlain, contract),
     pack_stats_without_alien: packOff.stats,
     pack_stats_with_alien: packOn.stats,
     cases_without_alien: summarizeCasesPacket(casesPlain),
@@ -425,6 +456,7 @@ async function evaluateScenario(
         trialRuns.push(
           await runCell({
             scenarioId: scenarioMeta.id,
+            scenarioMeta: { ...scenarioMeta, contract },
             model,
             alien,
             fixture,
@@ -492,6 +524,7 @@ async function evaluateScenario(
     benchmark,
     modelsConfig,
     scorePerfect: oracleScore,
+    contract,
   });
   const valence = winner
     ? {
@@ -534,6 +567,7 @@ async function evaluateScenario(
 
   return {
     scenario_id: scenarioMeta.id,
+    workflow_id: resolveWorkflowId(scenarioMeta),
     title: scenarioMeta.title,
     actor: scenarioMeta.actor,
     hard: Boolean(scenarioMeta.hard),
@@ -582,7 +616,9 @@ export async function runEvalMatrix({
   const modelsConfig = await readJson("config/models.json");
   const selected = scenarioId
     ? manifest.scenarios.filter((item) => item.id === scenarioId)
-    : manifest.scenarios;
+    : manifest.scenarios.filter(
+        (item) => item.nightmare || item.matrix_default === true,
+      );
 
   if (!selected.length) {
     throw new Error(`Unknown scenario: ${scenarioId}`);

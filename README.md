@@ -49,6 +49,27 @@ Picsou is not another chatbot. It is a **thrift router for attention**:
 **Bottom line:** keep expensive models for the hard cases; run thrifty SLMs on
 packed context for the rest — and prove the tradeoff with numbers.
 
+## Any decision workflow
+
+Picsou is a **universal thrift harness for decision workflows**, not a single
+triage product. A workflow plugs in when it declares:
+
+- frozen input packet(s) (baseline + optional Alien mirror)
+- structured JSON judgment schema
+- ground truth + perfect oracle output
+- how to score quality (field matchers + weights in the contract)
+
+Built-in contracts live under `workflows/`:
+
+| Contract | Use case |
+| --- | --- |
+| `triage-v1` (default) | Science attention triage — keep / skim / skip |
+| `decision-v1` | Binary approve/reject with grounded evidence |
+
+Clone `workflows/_template/` and `scenarios/_template/` for a new domain. Point
+`workflow_id` on a manifest entry at your contract. Design new workflows with
+`/picsou-grill` (local skill).
+
 ## How it works
 
 ```text
@@ -95,7 +116,8 @@ Useful commands:
 ```bash
 npm run score -- examples/perfect-output.json   # oracle path → quality 1.0
 npm run evaluate:fixture                        # legacy single workflow
-npm run evaluate:matrix                         # 3 scenarios × 4 models × Alien on/off
+npm run evaluate:matrix                         # 3 nightmare scenarios × 4 models × Alien on/off
+npm run evaluate:matrix -- --scenario demo-inbox-review   # decision-v1 demo only
 npm run evaluate:matrix -- --trials 3           # repeat cells for variance
 ```
 
@@ -138,7 +160,8 @@ fork, Track 3 adversarial traps).
 
 ```text
 config/      model candidates + pricing estimates
-scenarios/  matrix use cases (manifest.json)
+workflows/   workflow contracts (triage-v1, decision-v1, _template)
+scenarios/   matrix use cases (manifest.json)
 src/        packer, matrix eval, scoring helpers
 scripts/    score + repo contract checks
 examples/   perfect fixture output
