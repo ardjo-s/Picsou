@@ -1,5 +1,9 @@
 # Picsou Router
 
+<p align="center">
+  <img src="docs/assets/piscou-banner.jpg" alt="Piscou — small but sturdy" width="1024" />
+</p>
+
 Thrifty attention routing for small language models.
 
 Picsou packs a frozen evidence packet, runs the same triage task on **Gemma 4 E2B**
