@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-07-25T15:16:50.097Z",
+  "mode": "live",
+  "scenario_id": "nightmare-track3-adversarial",
+  "runnable_models": [
+    "gemma-4-e2b-it",
+    "deepseek-r1-distill-qwen-1.5b"
+  ],
+  "skipped_models": [
+    "ministral-3b-instruct",
+    "grok-4.5"
+  ],
+  "cells_completed": 4,
+  "tokens_total": {
+    "input_tokens": 8713,
+    "output_tokens": 2901,
+    "cached_tokens": 0,
+    "total_tokens": 11614,
+    "cell_count": 4
+  },
+  "calibration_summary": "Calibration: oracle=1.000 | reference=n/a | winner=gemma-4-e2b-it 1.000–1.000 (1 use cases) (confidence=demo-low, trials=1)",
+  "recommendation": {
+    "model": "gemma-4-e2b-it",
+    "alien": true,
+    "confidence": "demo-low",
+    "quality_score": 1,
+    "estimated_cost_usd": 0.0002185,
+    "latency_ms": 5615,
+    "tokens": {
+      "input_tokens": 2477,
+      "output_tokens": 631,
+      "cached_tokens": 0,
+      "total_tokens": 3108
+    }
+  },
+  "ranking": [
+    {
+      "model": "gemma-4-e2b-it",
+      "alien": true,
+      "quality": 1,
+      "eligible": true,
+      "provider": null,
+      "tokens": 3108,
+      "error": null
+    },
+    {
+      "model": "gemma-4-e2b-it",
+      "alien": false,
+      "quality": 1,
+      "eligible": false,
+      "provider": null,
+      "tokens": 2607,
+      "error": null
+    },
+    {
+      "model": "deepseek-r1-distill-qwen-1.5b",
+      "alien": false,
+      "quality": 0.14,
+      "eligible": false,
+      "provider": null,
+      "tokens": 2732,
+      "error": null
+    },
+    {
+      "model": "deepseek-r1-distill-qwen-1.5b",
+      "alien": true,
+      "quality": 0.14,
+      "eligible": false,
+      "provider": null,
+      "tokens": 3167,
+      "error": null
+    }
+  ],
+  "limitations": [
+    "Live matrix: Gemma/Ministral/DeepSeek via PICSOU_ENDPOINT_* (Brev/SGLang); Grok via XAI_API_KEY or ~/.grok/auth.json when x.ai is used.",
+    "Models missing from an endpoint are skipped, not invented.",
+    "Alien packets remain frozen mirrors in this MVP (not live MCP).",
+    "Confidence remains demo-low until --trials repeats the matrix."
+  ],
+  "notes": [
+    "Live Gemma 4 E2B via SGLang on NVIDIA Brev (port-forward :30000).",
+    "Alien packets remain frozen mirrors (not live MCP).",
+    "Ministral/Grok skipped when endpoints unavailable; DeepSeek optional on :30002."
+  ]
+}

@@ -51,3 +51,9 @@ Committed sample: [matrix-fixture-summary.json](./matrix-fixture-summary.json)
 npm run evaluate:matrix -- --trials 3
 npm run score -- examples/perfect-output.json
 ```
+
+## Optional live Gemma (not required for jury)
+
+If you already serve Gemma 4 E2B on an OpenAI-compatible endpoint (e.g. SGLang on
+NVIDIA Brev), see [LIVE.md](./LIVE.md). Alien packets stay frozen mirrors even in
+live mode. Captured smoke summary: [matrix-live-smoke-summary.json](./matrix-live-smoke-summary.json).

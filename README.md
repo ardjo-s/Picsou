@@ -108,6 +108,9 @@ export OPENAI_API_KEY=EMPTY
 npm run evaluate:matrix:live
 ```
 
+Step-by-step live notes + captured Brev smoke: [docs/demo/LIVE.md](docs/demo/LIVE.md).
+Alien packets stay frozen mirrors in live mode (not live MCP).
+
 Models in `config/models.json`: `gemma-4-e2b-it`, `ministral-3b-instruct`,
 `deepseek-r1-distill-qwen-1.5b`, `grok-4.5`.
 
