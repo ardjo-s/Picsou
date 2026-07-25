@@ -6,7 +6,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -1475,7 +1475,13 @@ async function main() {
 
 export { buildUseCase, buildUseCases, matrixRows, classicRows };
 
-main().catch((error) => {
-  console.error(String(error.message || error));
-  process.exitCode = 1;
-});
+const isDirectRun =
+  Boolean(process.argv[1]) &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+
+if (isDirectRun) {
+  main().catch((error) => {
+    console.error(String(error.message || error));
+    process.exitCode = 1;
+  });
+}
