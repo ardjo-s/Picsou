@@ -48,6 +48,15 @@ test("fixture matrix runs manifest scenarios × models × alien on/off", async (
     assert.ok(gemmaDelta?.delta_total_tokens > 0);
     assert.ok(gemmaDelta?.tokens_with_alien?.total_tokens > 0);
     assert.ok(gemmaDelta?.tokens_without_alien?.total_tokens > 0);
+
+    const grokWithout = scenario.cells.find(
+      (cell) => cell.model === "grok-4.5" && cell.alien === false,
+    );
+    assert.ok(grokWithout, scenario.scenario_id);
+    assert.ok(
+      grokWithout.score.quality_score < 1,
+      "reference_ceiling must use external_control fixture mutations",
+    );
   }
 });
 

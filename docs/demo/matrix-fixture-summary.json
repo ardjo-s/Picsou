@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T13:42:18.118Z",
+  "generated_at": "2026-07-25T13:44:33.253Z",
   "mode": "fixture",
   "track": "Context Engineering for SLMs",
   "models": [
@@ -50,11 +50,10 @@
       }
     }
   },
-  "calibration_summary": "Calibration: oracle=1.000 | reference=grok-4.5 1.000–1.000 | winner=gemma-4-e2b-it 1.000–1.000 (3 use cases) (confidence=demo-low, trials=1)",
+  "calibration_summary": "Calibration: oracle=1.000 | reference=grok-4.5 0.580–0.610 | winner=gemma-4-e2b-it 1.000–1.000 (3 use cases) (confidence=demo-low, trials=1)",
   "scenarios": [
     {
       "id": "nightmare-heat-lineage",
-      "title": "Nightmare: EU heat mortality with DOI lineage traps",
       "calibration": {
         "scenario_id": "nightmare-heat-lineage",
         "oracle": {
@@ -73,20 +72,20 @@
           "model_id": "grok-4.5",
           "role": "reference_ceiling",
           "best_cell": {
-            "alien": false,
-            "quality_score": 1,
-            "composite_score": 0.748881904762,
+            "alien": true,
+            "quality_score": 0.61,
+            "composite_score": null,
             "metrics": {
-              "priority_accuracy": 1,
-              "attention_fit_accuracy": 1,
+              "priority_accuracy": 0.4,
+              "attention_fit_accuracy": 0.6,
               "signal_f1": 1,
               "evidence_exactness": 1
             },
             "tokens": {
-              "input_tokens": 1891,
+              "input_tokens": 2317,
               "output_tokens": 780,
-              "cached_tokens": 113,
-              "total_tokens": 2671
+              "cached_tokens": 139,
+              "total_tokens": 3097
             }
           },
           "meaning": "Best empirical cell for the designated reference model on this scenario."
@@ -122,14 +121,12 @@
         ]
       },
       "recommendation": {
-        "alien": true,
-        "confidence": "demo-low"
+        "alien": true
       },
-      "recommendation_text": "USE CASE nightmare-heat-lineage: recommend gemma-4-e2b-it with alien=true. gemma-4-e2b-it + Alien=true wins on composite 0.956. Quality 1.000 (Alien lift +0.530). Cost $0.000230, latency 980 ms, tokens 3137. Beats ministral-3b-instruct (Alien=true) by composite gap 0.183781."
+      "grok_alien_off_quality": 0.47
     },
     {
       "id": "nightmare-icu-fork",
-      "title": "Nightmare: ICU protocol fork (ARDS timing vs non-ARDS PEEP)",
       "calibration": {
         "scenario_id": "nightmare-icu-fork",
         "oracle": {
@@ -148,20 +145,20 @@
           "model_id": "grok-4.5",
           "role": "reference_ceiling",
           "best_cell": {
-            "alien": false,
-            "quality_score": 1,
-            "composite_score": 0.748861088239,
+            "alien": true,
+            "quality_score": 0.58,
+            "composite_score": null,
             "metrics": {
-              "priority_accuracy": 1,
-              "attention_fit_accuracy": 1,
+              "priority_accuracy": 0.4,
+              "attention_fit_accuracy": 0.4,
               "signal_f1": 1,
               "evidence_exactness": 1
             },
             "tokens": {
-              "input_tokens": 1730,
+              "input_tokens": 2050,
               "output_tokens": 780,
-              "cached_tokens": 104,
-              "total_tokens": 2510
+              "cached_tokens": 123,
+              "total_tokens": 2830
             }
           },
           "meaning": "Best empirical cell for the designated reference model on this scenario."
@@ -197,14 +194,12 @@
         ]
       },
       "recommendation": {
-        "alien": true,
-        "confidence": "demo-low"
+        "alien": true
       },
-      "recommendation_text": "USE CASE nightmare-icu-fork: recommend gemma-4-e2b-it with alien=true. gemma-4-e2b-it + Alien=true wins on composite 0.962. Quality 1.000 (Alien lift +0.560). Cost $0.000217, latency 980 ms, tokens 2870. Beats ministral-3b-instruct (Alien=true) by composite gap 0.201988."
+      "grok_alien_off_quality": 0.44
     },
     {
       "id": "nightmare-track3-adversarial",
-      "title": "Nightmare: Track 3 jury adversarial (Gemma-core vs hallucinated RAG)",
       "calibration": {
         "scenario_id": "nightmare-track3-adversarial",
         "oracle": {
@@ -223,20 +218,20 @@
           "model_id": "grok-4.5",
           "role": "reference_ceiling",
           "best_cell": {
-            "alien": false,
-            "quality_score": 1,
-            "composite_score": 0.748860265664,
+            "alien": true,
+            "quality_score": 0.58,
+            "composite_score": null,
             "metrics": {
-              "priority_accuracy": 1,
-              "attention_fit_accuracy": 1,
+              "priority_accuracy": 0.4,
+              "attention_fit_accuracy": 0.4,
               "signal_f1": 1,
               "evidence_exactness": 1
             },
             "tokens": {
-              "input_tokens": 1724,
+              "input_tokens": 2121,
               "output_tokens": 780,
-              "cached_tokens": 103,
-              "total_tokens": 2504
+              "cached_tokens": 127,
+              "total_tokens": 2901
             }
           },
           "meaning": "Best empirical cell for the designated reference model on this scenario."
@@ -272,10 +267,9 @@
         ]
       },
       "recommendation": {
-        "alien": true,
-        "confidence": "demo-low"
+        "alien": true
       },
-      "recommendation_text": "USE CASE nightmare-track3-adversarial: recommend gemma-4-e2b-it with alien=true. gemma-4-e2b-it + Alien=true wins on composite 0.956. Quality 1.000 (Alien lift +0.560). Cost $0.000221, latency 980 ms, tokens 2941. Beats ministral-3b-instruct (Alien=true) by composite gap 0.200651."
+      "grok_alien_off_quality": 0.44
     }
   ]
 }

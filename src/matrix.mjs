@@ -68,6 +68,12 @@ function applyFixtureMutations(perfect, mutations = []) {
   return output;
 }
 
+/** Map model.role to fixture-behavior.json mutation keys. */
+function fixtureBehaviorRoleKey(role) {
+  if (role === "reference_ceiling") return "external_control";
+  return role || "slm_under_test";
+}
+
 function hashString(input) {
   let h = 2166136261;
   for (let i = 0; i < input.length; i++) {
@@ -211,7 +217,7 @@ async function runCell({
       const baseOutput = alignOutputUrls(loaded.perfect, loaded.cases);
       const behavior = await loadFixtureBehavior(scenarioId);
       const axis = alien ? "true" : "false";
-      const roleKey = model.role || "slm_under_test";
+      const roleKey = fixtureBehaviorRoleKey(model.role);
       const mutations =
         behavior?.mutations?.[axis]?.[roleKey] ||
         (roleKey === "slm_under_test" && !alien
