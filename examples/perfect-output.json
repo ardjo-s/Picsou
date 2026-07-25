@@ -1,0 +1,92 @@
+{
+  "workflow_version": "1.0.0",
+  "results": [
+    {
+      "case_id": "air-paris-001",
+      "title": "Short-term NO2 exposure and emergency admissions in Greater Paris",
+      "attention_fit": true,
+      "priority": "high",
+      "signals": [
+        {
+          "source_id": "air-paris-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+          "evidence_quote": "short-term NO2 spikes are associated with higher respiratory emergency admissions",
+          "confidence": 0.99
+        },
+        {
+          "source_id": "air-paris-abstract",
+          "signal_type": "impact_claim",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+          "evidence_quote": "strongest effect on older adults during summer heat episodes",
+          "confidence": 0.98
+        },
+        {
+          "source_id": "air-paris-method",
+          "signal_type": "method_signal",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+          "evidence_quote": "case-crossover design with city monitoring stations",
+          "confidence": 0.97
+        }
+      ]
+    },
+    {
+      "case_id": "solar-grid-002",
+      "title": "Distributed solar PV and evening peak residual load on a French DSO feeder",
+      "attention_fit": true,
+      "priority": "medium",
+      "signals": [
+        {
+          "source_id": "solar-grid-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.solar.grid.002",
+          "evidence_quote": "higher rooftop PV penetration lowers midday net load but can sharpen the evening residual peak",
+          "confidence": 0.96
+        },
+        {
+          "source_id": "solar-grid-method",
+          "signal_type": "method_signal",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.solar.grid.002",
+          "evidence_quote": "anonymized French DSO feeder using measured irradiance",
+          "confidence": 0.95
+        }
+      ]
+    },
+    {
+      "case_id": "llm-bench-003",
+      "title": "A multilingual instruction-tuning benchmark for transformer language models",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "heat-eu-004",
+      "title": "Heatwave mortality inequalities across European NUTS2 regions",
+      "attention_fit": true,
+      "priority": "high",
+      "signals": [
+        {
+          "source_id": "heat-eu-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.heat.eu.004",
+          "evidence_quote": "heatwave days are linked to excess all-cause mortality",
+          "confidence": 0.99
+        },
+        {
+          "source_id": "heat-eu-impact",
+          "signal_type": "impact_claim",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.heat.eu.004",
+          "evidence_quote": "adaptation spending should prioritize cooling centers and urban greening",
+          "confidence": 0.97
+        }
+      ]
+    },
+    {
+      "case_id": "crypto-mine-005",
+      "title": "Proof-of-work mining profitability under volatile electricity tariffs",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    }
+  ]
+}

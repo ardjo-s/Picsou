@@ -1,0 +1,18 @@
+{
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "verified_at": "2026-07-25",
+  "source": "hackathon planning estimates for local/self-hosted serving; replace with measured $/token when using a billed API",
+  "models": {
+    "gemma-4-e4b-it": {
+      "input": 0.1,
+      "cached_input": 0.02,
+      "output": 0.3
+    },
+    "gemma-4-26b-a4b-it": {
+      "input": 0.4,
+      "cached_input": 0.08,
+      "output": 1.2
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "verified_at": "2026-07-25",
+  "purpose": "Compare Gemma 4 E4B under engineered context against one larger baseline on the same frozen packet.",
+  "demo_candidates": [
+    {
+      "id": "gemma-4-e4b-it",
+      "role": "slm_under_test",
+      "serving": "openai-compatible",
+      "notes": "Primary Gemma 4 edge/SLM candidate via SGLang, vLLM, or Ollama OpenAI API."
+    },
+    {
+      "id": "gemma-4-26b-a4b-it",
+      "role": "larger_baseline",
+      "serving": "openai-compatible",
+      "notes": "Larger Gemma 4 MoE baseline for cost/latency/quality contrast."
+    }
+  ],
+  "discovery_contract": {
+    "strategy": "intersect_configured_candidates_with_accessible_models",
+    "never_claim_all_models": true,
+    "report_tested_skipped_and_failed": true,
+    "skip_if_pricing_missing": true
+  }
+}

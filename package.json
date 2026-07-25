@@ -1,0 +1,18 @@
+{
+  "name": "picsou-router",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Picsou Router — evaluate whether Gemma 4 E4B is enough for a frozen OpenAIRE attention-routing workflow.",
+  "type": "module",
+  "scripts": {
+    "score": "node scripts/score.mjs",
+    "validate": "node scripts/validate-repo.mjs",
+    "test": "node --test test/*.test.mjs && node scripts/validate-repo.mjs",
+    "evaluate": "node src/cli.mjs",
+    "evaluate:fixture": "node src/cli.mjs --fixture"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

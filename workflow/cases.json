@@ -1,0 +1,152 @@
+{
+  "workflow_version": "1.0.0",
+  "evidence_mode": "frozen_openaire_style",
+  "captured_at": "2026-07-25",
+  "researcher_profile": {
+    "role": "European climate and clean-energy policy analyst",
+    "focus": [
+      "urban air quality and health",
+      "renewable energy deployment",
+      "extreme heat and climate adaptation in Europe"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "air-paris-001",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-demo-air-paris-001",
+        "title": "Short-term NO2 exposure and emergency admissions in Greater Paris",
+        "year": 2024,
+        "topics": ["air quality", "public health", "urban Europe"],
+        "access": "open"
+      },
+      "sources": [
+        {
+          "source_id": "air-paris-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Using hospital and monitor data for Greater Paris 2015-2022, the study finds that short-term NO2 spikes are associated with higher respiratory emergency admissions, with the strongest effect on older adults during summer heat episodes."
+        },
+        {
+          "source_id": "air-paris-method",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "The authors use a case-crossover design with city monitoring stations and report adjusted relative risks for NO2 lagged 0-2 days."
+        },
+        {
+          "source_id": "air-paris-distractor",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Supplementary tables list R package versions used for plotting maps."
+        }
+      ]
+    },
+    {
+      "case_id": "solar-grid-002",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-demo-solar-grid-002",
+        "title": "Distributed solar PV and evening peak residual load on a French DSO feeder",
+        "year": 2023,
+        "topics": ["solar PV", "distribution grid", "energy systems"],
+        "access": "open"
+      },
+      "sources": [
+        {
+          "source_id": "solar-grid-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.solar.grid.002",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Feeder-level measurements show that higher rooftop PV penetration lowers midday net load but can sharpen the evening residual peak unless paired with storage or demand flexibility."
+        },
+        {
+          "source_id": "solar-grid-method",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.solar.grid.002",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "The study simulates 2025-2030 PV uptake scenarios on an anonymized French DSO feeder using measured irradiance and smart-meter aggregates."
+        }
+      ]
+    },
+    {
+      "case_id": "llm-bench-003",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-demo-llm-bench-003",
+        "title": "A multilingual instruction-tuning benchmark for transformer language models",
+        "year": 2025,
+        "topics": ["NLP", "benchmarks", "large language models"],
+        "access": "open"
+      },
+      "sources": [
+        {
+          "source_id": "llm-bench-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.llm.bench.003",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "The paper introduces a 12-task multilingual instruction-tuning benchmark and reports that denser models outperform mixture-of-experts baselines on reasoning prompts."
+        },
+        {
+          "source_id": "llm-bench-method",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.llm.bench.003",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Evaluation covers zero-shot and few-shot settings across English, French, German, and Spanish with automatic metrics only."
+        }
+      ]
+    },
+    {
+      "case_id": "heat-eu-004",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-demo-heat-eu-004",
+        "title": "Heatwave mortality inequalities across European NUTS2 regions",
+        "year": 2024,
+        "topics": ["extreme heat", "mortality", "climate adaptation", "Europe"],
+        "access": "open"
+      },
+      "sources": [
+        {
+          "source_id": "heat-eu-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.heat.eu.004",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Across European NUTS2 regions, heatwave days are linked to excess all-cause mortality, with larger relative increases in regions that combine high elderly shares and limited green-space access."
+        },
+        {
+          "source_id": "heat-eu-impact",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.heat.eu.004",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "The authors argue that adaptation spending should prioritize cooling centers and urban greening in the highest-risk southern and eastern regions."
+        }
+      ]
+    },
+    {
+      "case_id": "crypto-mine-005",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-demo-crypto-mine-005",
+        "title": "Proof-of-work mining profitability under volatile electricity tariffs",
+        "year": 2022,
+        "topics": ["cryptocurrency", "mining", "electricity markets"],
+        "access": "open"
+      },
+      "sources": [
+        {
+          "source_id": "crypto-mine-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.crypto.mine.005",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "The paper models ASIC mining cash flows under day-ahead electricity prices and concludes that profitability is dominated by hashprice swings rather than renewable curtailment events."
+        },
+        {
+          "source_id": "crypto-mine-method",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.crypto.mine.005",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Scenarios assume a Texas ERCOT retail tariff and ignore European grid congestion or household energy poverty metrics."
+        }
+      ]
+    }
+  ]
+}

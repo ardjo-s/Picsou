@@ -1,0 +1,66 @@
+{
+  "workflow_version": "1.0.0",
+  "cases": [
+    {
+      "case_id": "air-paris-001",
+      "attention_fit": true,
+      "priority": "high",
+      "expected_signals": [
+        {
+          "source_id": "air-paris-abstract",
+          "signal_type": "relevance_hook"
+        },
+        {
+          "source_id": "air-paris-abstract",
+          "signal_type": "impact_claim"
+        },
+        {
+          "source_id": "air-paris-method",
+          "signal_type": "method_signal"
+        }
+      ]
+    },
+    {
+      "case_id": "solar-grid-002",
+      "attention_fit": true,
+      "priority": "medium",
+      "expected_signals": [
+        {
+          "source_id": "solar-grid-abstract",
+          "signal_type": "relevance_hook"
+        },
+        {
+          "source_id": "solar-grid-method",
+          "signal_type": "method_signal"
+        }
+      ]
+    },
+    {
+      "case_id": "llm-bench-003",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    },
+    {
+      "case_id": "heat-eu-004",
+      "attention_fit": true,
+      "priority": "high",
+      "expected_signals": [
+        {
+          "source_id": "heat-eu-abstract",
+          "signal_type": "relevance_hook"
+        },
+        {
+          "source_id": "heat-eu-impact",
+          "signal_type": "impact_claim"
+        }
+      ]
+    },
+    {
+      "case_id": "crypto-mine-005",
+      "attention_fit": false,
+      "priority": "skip",
+      "expected_signals": []
+    }
+  ]
+}

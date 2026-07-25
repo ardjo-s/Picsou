@@ -1,0 +1,62 @@
+{
+  "workflow_version": "1.0.0",
+  "captured_at": "2026-07-25",
+  "note": "Demo corpus uses OpenAIRE-style public research metadata shapes with normalized evidence text. URLs are provenance placeholders for the hackathon sprint; they are not claims of live DOI resolution.",
+  "sources": [
+    {
+      "source_id": "air-paris-abstract",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "air-paris-method",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "air-paris-distractor",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.air.paris.001",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "solar-grid-abstract",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.solar.grid.002",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "solar-grid-method",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.solar.grid.002",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "llm-bench-abstract",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.llm.bench.003",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "llm-bench-method",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.llm.bench.003",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "heat-eu-abstract",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.heat.eu.004",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "heat-eu-impact",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.heat.eu.004",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "crypto-mine-abstract",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.crypto.mine.005",
+      "kind": "normalized_public_fact"
+    },
+    {
+      "source_id": "crypto-mine-method",
+      "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.demo.crypto.mine.005",
+      "kind": "normalized_public_fact"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "benchmark_id": "picsou-openaire-attention-v1",
+  "workflow_version": "1.0.0",
+  "prompt_path": "workflow/prompt.md",
+  "cases_path": "workflow/cases.json",
+  "ground_truth_path": "workflow/ground-truth.json",
+  "output_schema_path": "workflow/output.schema.json",
+  "model_config_path": "config/models.json",
+  "pricing_path": "config/model-pricing.json",
+  "source_ledger_path": "workflow/source-ledger.json",
+  "context_pack_path": "workflow/context-pack.md",
+  "scoring": {
+    "quality_components": {
+      "priority_accuracy": 0.55,
+      "evidence_exactness": 0.3,
+      "attention_fit_accuracy": 0.15
+    },
+    "recommendation_components": {
+      "quality": 0.65,
+      "cost_efficiency": 0.2,
+      "latency_efficiency": 0.15
+    },
+    "minimum_quality_to_recommend": 0.75,
+    "tie_break_order": ["quality", "estimated_cost_usd", "latency_ms"]
+  }
+}
