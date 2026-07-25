@@ -1,0 +1,39 @@
+{
+  "scenario_id": "nightmare-track3-adversarial",
+  "note": "Grok 4.5 (reference_ceiling) stays near oracle on packed packets; DeepSeek external_control fails traps; Gemma+Alien matches ceiling quality at thrift cost.",
+  "mutations": {
+    "false": {
+      "slm_under_test": [
+        "set_high:rag-halluc-paper-002",
+        "set_high:slm-arch-bench-003",
+        "set_high:edge-gemma-camera-005",
+        "set_high:omnichat-wrapper-004"
+      ],
+      "larger_baseline": [
+        "set_high:rag-halluc-paper-002",
+        "set_high:edge-gemma-camera-005"
+      ],
+      "external_control": [
+        "set_high:rag-halluc-paper-002",
+        "set_high:slm-arch-bench-003",
+        "set_high:edge-gemma-camera-005",
+        "set_high:omnichat-wrapper-004"
+      ],
+      "reference_ceiling": [
+        "set_medium:picsou-core-001"
+      ]
+    },
+    "true": {
+      "slm_under_test": [],
+      "larger_baseline": [
+        "set_medium:rag-halluc-paper-002"
+      ],
+      "external_control": [
+        "set_high:rag-halluc-paper-002",
+        "set_high:slm-arch-bench-003",
+        "set_medium:edge-gemma-camera-005"
+      ],
+      "reference_ceiling": []
+    }
+  }
+}

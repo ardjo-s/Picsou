@@ -1,0 +1,63 @@
+{
+  "workflow_version": "1.0.0",
+  "results": [
+    {
+      "case_id": "heat-nuts-real-001",
+      "title": "Evolution of Intense Heat Wave Hazard and Heat-Related Mortality in Europe",
+      "attention_fit": true,
+      "priority": "high",
+      "signals": [
+        {
+          "source_id": "heat-nuts-001-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu26-15042",
+          "evidence_quote": "health hazard over Europe",
+          "confidence": 0.97
+        },
+        {
+          "source_id": "heat-nuts-001-quant",
+          "signal_type": "impact_claim",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu26-15042",
+          "evidence_quote": "NUTS 3 mortality records",
+          "confidence": 0.97
+        }
+      ]
+    },
+    {
+      "case_id": "us-phoenix-title-eu-002",
+      "title": "European-style heat hospitalizations: Phoenix cooling-center utilization",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "paris-no2-old-003",
+      "title": "NO2 and emergency admissions in Greater Paris",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "llm-climatebench-004",
+      "title": "ClimateBench-LLM: transformers on European heatwave QA",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "heat-superseded-005",
+      "title": "Heatwave vulnerability index validated on mortality data in Europe (EGU abstract)",
+      "attention_fit": true,
+      "priority": "medium",
+      "signals": [
+        {
+          "source_id": "super-005-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.5194/egusphere-egu24-1899",
+          "evidence_quote": "validated on mortality data in Europe",
+          "confidence": 0.97
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "matrix_version": "3.0.0-nightmare",
+  "alien_axis": [
+    false,
+    true
+  ],
+  "provenance": "OpenAIRE Graph API harvest (Alien Open Science MCP substrate). Alien Intelligence MCP server not installed in this Cursor session.",
+  "scenarios": [
+    {
+      "id": "nightmare-heat-lineage",
+      "title": "Nightmare: EU heat mortality with DOI lineage traps",
+      "actor": "European Commission aide",
+      "alien_sources": [
+        "openaire"
+      ],
+      "hard": true,
+      "nightmare": true
+    },
+    {
+      "id": "nightmare-icu-fork",
+      "title": "Nightmare: ICU protocol fork (ARDS timing vs non-ARDS PEEP)",
+      "actor": "pulmonologist",
+      "alien_sources": [
+        "openaire",
+        "medrxiv"
+      ],
+      "hard": true,
+      "nightmare": true
+    },
+    {
+      "id": "nightmare-track3-adversarial",
+      "title": "Nightmare: Track 3 jury adversarial (Gemma-core vs hallucinated RAG)",
+      "actor": "hackathon jury",
+      "alien_sources": [
+        "openaire"
+      ],
+      "hard": true,
+      "nightmare": true
+    }
+  ]
+}

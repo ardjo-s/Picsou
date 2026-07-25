@@ -1,0 +1,55 @@
+{
+  "workflow_version": "1.0.0",
+  "results": [
+    {
+      "case_id": "ards-ltv-timing-001",
+      "title": "Timing of Low Tidal Volume Ventilation and Intensive Care Unit Mortality in Acute Respiratory Distress Syndrome. A Prospective Cohort Study",
+      "attention_fit": true,
+      "priority": "high",
+      "signals": [
+        {
+          "source_id": "ards-001-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.1164/rccm.201409-1598oc",
+          "evidence_quote": "Reducing tidal volume decreases mortality in acute respiratory distress syndrome",
+          "confidence": 0.97
+        },
+        {
+          "source_id": "ards-001-endpoint",
+          "signal_type": "impact_claim",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.1164/rccm.201409-1598oc",
+          "evidence_quote": "482 patients with ARDS",
+          "confidence": 0.97
+        }
+      ]
+    },
+    {
+      "case_id": "peep-nonards-002",
+      "title": "Effect of a Lower vs Higher Positive End-Expiratory Pressure Strategy on Ventilator-Free Days in ICU Patients Without ARDS",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "mouse-biofilm-003",
+      "title": "Biofilm disruption reduces pneumonia markers in ventilated mice",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "vap-peds-004",
+      "title": "Preventive oral hygiene and VAP in paediatric intensive care",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "preprint-highpeep-005",
+      "title": "Universal early high-PEEP for all hypoxemic adults — preprint claim",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    }
+  ]
+}

@@ -1,73 +1,97 @@
-# Picsou Router: thrifty science attention with Gemma 4 E4B
+# Picsou Router: thrifty attention routing with Gemma 4 E2B
 
 **Track:** Context Engineering for SLMs  
-**Hackathon:** [Paris Gemma 4 Hackathon](https://www.kaggle.com/competitions/paris-gemma-4-hackathon)
+**Hackathon:** [Paris Gemma 4 Hackathon](https://www.kaggle.com/competitions/paris-gemma-4-hackathon)  
+**Repo:** https://github.com/ardjo-s/Picsou
 
 ## Problem
 
-Policy analysts drown in open research. The costly mistake is not “missing a
-transformer paper”—it is spending attention on the wrong paper. Large models
-can triage, but they are slow and expensive to run for every alert. Small
-models fail when the context is messy.
+Analysts drown in open research and noisy lead feeds. The costly mistake is not
+missing a paper—it is spending attention on the wrong one. Large models triage
+well but are slow and expensive. Small models fail when context is messy.
 
 ## Solution
 
-Picsou packs frozen OpenAIRE-style evidence, asks Gemma 4 E4B to triage the
-same cases as a larger Gemma baseline, then scores both deterministically.
-The product is not another chat UI. It is a **context contract** that makes
-the small model enough: select, structure, compress, and force exact-evidence
-citations.
+Picsou is a **context contract** plus eval harness. We **select** decision-bearing
+fields, **structure** them into a strict JSON task, **compress** noise, inject
+**distractors** (title traps, wrong geography, stale years), and require **exact
+citations** as substrings of frozen source text.
+
+Gemma 4 E2B (`gemma-4-e2b-it`) is the SLM under test. Light baselines (Ministral 3B,
+DeepSeek 1.5B distill) and Grok 4.5 (market `reference_ceiling`: AA Intelligence
+Index #4 / 54, Jul 2026; strong on Snorkel GDPval+ triage and cost/token Pareto;
+not the hallucination leader) run on the same packed packet. An **Alien axis**
+compares frozen baseline packets against Alien-enriched mirrors so judges see
+whether extra context pays for itself in quality per token.
+
+The product is not another chat UI. It answers: *which small model is enough,
+and does Alien context justify its token cost?*
 
 ## How Gemma 4 is used
 
-Gemma 4 is load-bearing. `gemma-4-e4b-it` is the SLM under test. A larger
-Gemma 4 MoE candidate (`gemma-4-26b-a4b-it`) is the baseline. Both receive the
-identical packed packet through an OpenAI-compatible endpoint (SGLang, vLLM,
-or Ollama). Outputs must match a strict JSON schema. Quotes must be exact
-substrings of frozen source text. Invented citations fail.
+Gemma 4 E2B receives identical packed packets through OpenAI-compatible
+endpoints (SGLang on NVIDIA Brev when live). Outputs must match a strict JSON
+schema. Quotes must be exact substrings of source text. Invented citations fail
+scoring. Gemma is essential: the entire benchmark scores structured triage on
+packets engineered for SLM attention thrift.
+
+Matrix mode runs three nightmare use cases (EU heat lineage, ICU protocol fork,
+Track 3 jury adversarial): 4 models × Alien on/off = 24 fixture cells judges
+reproduce without a GPU.
 
 ## Architecture and process
 
-1. Freeze five research cases with fit and distractor snippets.
+1. Freeze cases per scenario with fit labels and distractor snippets.
 2. Pack only decision-bearing fields into the model message.
-3. Run Gemma 4 E4B and the baseline on the same packet.
-4. Score priority accuracy, attention-fit accuracy, signal F1, and evidence
-   exactness.
-5. Recommend with a composite of quality, estimated cost, and latency.
+3. Run Gemma E2B and baselines on the same packet (fixture or live).
+4. Score priority accuracy, attention-fit accuracy, signal F1, evidence
+   exactness, plus token/cost/latency efficiency.
+5. Emit calibration (oracle = 1.0, reference model, winner) and a valence reco
+   per use case. See `docs/SCORE-GUIDE.md`.
 
-Judges can reproduce the offline path with no GPU:
+Judges reproduce offline:
 
 ```bash
 npm test
-npm run evaluate:fixture
+npm run evaluate:matrix
 ```
 
-Live path:
+Live matrix (optional):
 
 ```bash
-export OPENAI_BASE_URL=http://127.0.0.1:30000/v1
-export OPENAI_API_KEY=EMPTY
-npm run evaluate
+export PICSOU_ENDPOINT_GEMMA=http://127.0.0.1:30000/v1
+export PICSOU_ENDPOINT_MISTRAL=http://127.0.0.1:30001/v1
+export PICSOU_ENDPOINT_DEEPSEEK=http://127.0.0.1:30002/v1
+npm run evaluate:matrix:live
 ```
+
+## Demo (no login, no GPU)
+
+Clone https://github.com/ardjo-s/Picsou and run `npm run evaluate:matrix`.
+Full instructions: `docs/demo/JURY-DEMO.md`. Optional Cursor pitch: `/Picsou`
+opens per-use-case canvas reports with prompts, tokens, and calibration graphs.
 
 ## Challenges and choices
 
-- **Fair comparison:** live web search would destroy parity. We froze evidence.
+- **Fair comparison:** live web search would destroy parity; we freeze evidence.
+  Alien packets are frozen mirrors in fixture mode, not live MCP during scoring.
 - **Hallucination control:** exact-quote scoring over free-form summaries.
-- **Track fit:** the innovation is packing, not fine-tuning weights in an
-  eight-hour sprint.
-- **Honest confidence:** recommendations are labeled `demo-low` (five cases,
-  one trial).
+- **Track fit:** innovation is packing and eval, not fine-tuning in a sprint.
+- **Honest confidence:** recommendations are labeled `demo-low` until live trials repeat.
+- **Out of scope:** tool-call loops and reasoning-token efficiency are not scored
+  (one-shot JSON triage only). See `docs/SCORE-GUIDE.md`.
 
 ## Impact
 
-A climate/air-quality analyst gets a thrifty router: keep high-signal European
-heat and pollution papers, skim adjacent grid-PV work, skip pure LLM benchmarks
-and crypto-mining profitability studies. Context engineering turns Gemma 4 E4B
-into a practical filter instead of a fragile chatbot.
+A policy analyst, consultant, or jury member gets a thrifty router: keep
+high-signal items, skim adjacent work, skip traps. Context engineering turns
+Gemma 4 E2B into a practical filter instead of a fragile chatbot. Alien
+Intelligence enriches context; Picsou measures whether that enrichment is worth
+the tokens for a given workflow and model.
 
 ## Links
 
-- Public repo: attach GitHub URL in the Kaggle Writeup attachments
-- Demo: `npm run evaluate:fixture` or a live SGLang Gemma endpoint
+- Public repo: https://github.com/ardjo-s/Picsou
+- Demo: `docs/demo/JURY-DEMO.md` and `npm run evaluate:matrix`
+- Score guide: `docs/SCORE-GUIDE.md`
 - Competition: https://www.kaggle.com/competitions/paris-gemma-4-hackathon

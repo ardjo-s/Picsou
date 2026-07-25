@@ -1,0 +1,293 @@
+{
+  "generated_at": "2026-07-25T14:38:10.315Z",
+  "mode": "fixture",
+  "track": "Context Engineering for SLMs",
+  "models": [
+    "gemma-4-e2b-it",
+    "ministral-3b-instruct",
+    "deepseek-r1-distill-qwen-1.5b",
+    "grok-4.5"
+  ],
+  "summary": {
+    "scenario_count": 3,
+    "cells_attempted": 24,
+    "cells_completed": 24,
+    "runnable_models": [
+      "gemma-4-e2b-it",
+      "ministral-3b-instruct",
+      "deepseek-r1-distill-qwen-1.5b",
+      "grok-4.5"
+    ],
+    "skipped_models": [],
+    "tokens_total": {
+      "input_tokens": 47332,
+      "output_tokens": 19560,
+      "cached_tokens": 3194,
+      "total_tokens": 66892,
+      "cell_count": 24
+    },
+    "tokens_by_workflow": {
+      "nightmare-heat-lineage": {
+        "input_tokens": 16832,
+        "output_tokens": 6520,
+        "cached_tokens": 1136,
+        "total_tokens": 23352,
+        "cell_count": 8
+      },
+      "nightmare-icu-fork": {
+        "input_tokens": 15120,
+        "output_tokens": 6520,
+        "cached_tokens": 1022,
+        "total_tokens": 21640,
+        "cell_count": 8
+      },
+      "nightmare-track3-adversarial": {
+        "input_tokens": 15380,
+        "output_tokens": 6520,
+        "cached_tokens": 1036,
+        "total_tokens": 21900,
+        "cell_count": 8
+      }
+    }
+  },
+  "calibration_summary": "Calibration: oracle=1.000 | reference=grok-4.5 0.890–1.000 | winner=gemma-4-e2b-it 1.000–1.000 (3 use cases) (confidence=demo-low, trials=1)",
+  "scenarios": [
+    {
+      "id": "nightmare-heat-lineage",
+      "calibration": {
+        "scenario_id": "nightmare-heat-lineage",
+        "oracle": {
+          "source": "perfect-output",
+          "quality_score": 1,
+          "schema_valid": true,
+          "metrics": {
+            "priority_accuracy": 1,
+            "attention_fit_accuracy": 1,
+            "signal_f1": 1,
+            "evidence_exactness": 1
+          },
+          "meaning": "Theoretical ceiling: perfect triage + exact evidence on frozen ground truth for this scenario."
+        },
+        "reference_model": {
+          "model_id": "grok-4.5",
+          "role": "reference_ceiling",
+          "best_cell": {
+            "alien": true,
+            "quality_score": 1,
+            "composite_score": 0.732087471511,
+            "metrics": {
+              "priority_accuracy": 1,
+              "attention_fit_accuracy": 1,
+              "signal_f1": 1,
+              "evidence_exactness": 1
+            },
+            "tokens": {
+              "input_tokens": 2317,
+              "output_tokens": 780,
+              "cached_tokens": 139,
+              "total_tokens": 3097
+            }
+          },
+          "meaning": "Best empirical cell for the designated reference model on this scenario."
+        },
+        "quality_formula": {
+          "weights": {
+            "priority_accuracy": 0.55,
+            "evidence_exactness": 0.3,
+            "attention_fit_accuracy": 0.15
+          },
+          "minimum_to_recommend": 0.75,
+          "evidence_term": "evidence_exactness * signal_f1",
+          "recommendation_components": {
+            "quality": 0.55,
+            "cost_efficiency": 0.2,
+            "latency_efficiency": 0.15,
+            "token_efficiency": 0.1
+          }
+        },
+        "worked_examples": [
+          {
+            "label": "oracle",
+            "quality_score": 1,
+            "note": "perfect-output.json"
+          },
+          {
+            "label": "lowest_completed_cell",
+            "quality_score": 0.47,
+            "model": "gemma-4-e2b-it",
+            "alien": false,
+            "note": "Lowest quality among completed cells in this run."
+          }
+        ]
+      },
+      "recommendation": {
+        "model": "gemma-4-e2b-it",
+        "alien": true,
+        "quality_score": 1,
+        "confidence": "demo-low"
+      },
+      "grok_alien_off_quality": 0.89,
+      "grok_alien_on_quality": 1,
+      "gemma_alien_off_quality": 0.47,
+      "gemma_alien_on_quality": 1
+    },
+    {
+      "id": "nightmare-icu-fork",
+      "calibration": {
+        "scenario_id": "nightmare-icu-fork",
+        "oracle": {
+          "source": "perfect-output",
+          "quality_score": 1,
+          "schema_valid": true,
+          "metrics": {
+            "priority_accuracy": 1,
+            "attention_fit_accuracy": 1,
+            "signal_f1": 1,
+            "evidence_exactness": 1
+          },
+          "meaning": "Theoretical ceiling: perfect triage + exact evidence on frozen ground truth for this scenario."
+        },
+        "reference_model": {
+          "model_id": "grok-4.5",
+          "role": "reference_ceiling",
+          "best_cell": {
+            "alien": true,
+            "quality_score": 1,
+            "composite_score": 0.734635953896,
+            "metrics": {
+              "priority_accuracy": 1,
+              "attention_fit_accuracy": 1,
+              "signal_f1": 1,
+              "evidence_exactness": 1
+            },
+            "tokens": {
+              "input_tokens": 2050,
+              "output_tokens": 780,
+              "cached_tokens": 123,
+              "total_tokens": 2830
+            }
+          },
+          "meaning": "Best empirical cell for the designated reference model on this scenario."
+        },
+        "quality_formula": {
+          "weights": {
+            "priority_accuracy": 0.55,
+            "evidence_exactness": 0.3,
+            "attention_fit_accuracy": 0.15
+          },
+          "minimum_to_recommend": 0.75,
+          "evidence_term": "evidence_exactness * signal_f1",
+          "recommendation_components": {
+            "quality": 0.55,
+            "cost_efficiency": 0.2,
+            "latency_efficiency": 0.15,
+            "token_efficiency": 0.1
+          }
+        },
+        "worked_examples": [
+          {
+            "label": "oracle",
+            "quality_score": 1,
+            "note": "perfect-output.json"
+          },
+          {
+            "label": "lowest_completed_cell",
+            "quality_score": 0.44,
+            "model": "gemma-4-e2b-it",
+            "alien": false,
+            "note": "Lowest quality among completed cells in this run."
+          }
+        ]
+      },
+      "recommendation": {
+        "model": "gemma-4-e2b-it",
+        "alien": true,
+        "quality_score": 1,
+        "confidence": "demo-low"
+      },
+      "grok_alien_off_quality": 0.89,
+      "grok_alien_on_quality": 1,
+      "gemma_alien_off_quality": 0.44,
+      "gemma_alien_on_quality": 1
+    },
+    {
+      "id": "nightmare-track3-adversarial",
+      "calibration": {
+        "scenario_id": "nightmare-track3-adversarial",
+        "oracle": {
+          "source": "perfect-output",
+          "quality_score": 1,
+          "schema_valid": true,
+          "metrics": {
+            "priority_accuracy": 1,
+            "attention_fit_accuracy": 1,
+            "signal_f1": 1,
+            "evidence_exactness": 1
+          },
+          "meaning": "Theoretical ceiling: perfect triage + exact evidence on frozen ground truth for this scenario."
+        },
+        "reference_model": {
+          "model_id": "grok-4.5",
+          "role": "reference_ceiling",
+          "best_cell": {
+            "alien": true,
+            "quality_score": 1,
+            "composite_score": 0.732179055685,
+            "metrics": {
+              "priority_accuracy": 1,
+              "attention_fit_accuracy": 1,
+              "signal_f1": 1,
+              "evidence_exactness": 1
+            },
+            "tokens": {
+              "input_tokens": 2121,
+              "output_tokens": 780,
+              "cached_tokens": 127,
+              "total_tokens": 2901
+            }
+          },
+          "meaning": "Best empirical cell for the designated reference model on this scenario."
+        },
+        "quality_formula": {
+          "weights": {
+            "priority_accuracy": 0.55,
+            "evidence_exactness": 0.3,
+            "attention_fit_accuracy": 0.15
+          },
+          "minimum_to_recommend": 0.75,
+          "evidence_term": "evidence_exactness * signal_f1",
+          "recommendation_components": {
+            "quality": 0.55,
+            "cost_efficiency": 0.2,
+            "latency_efficiency": 0.15,
+            "token_efficiency": 0.1
+          }
+        },
+        "worked_examples": [
+          {
+            "label": "oracle",
+            "quality_score": 1,
+            "note": "perfect-output.json"
+          },
+          {
+            "label": "lowest_completed_cell",
+            "quality_score": 0.44,
+            "model": "gemma-4-e2b-it",
+            "alien": false,
+            "note": "Lowest quality among completed cells in this run."
+          }
+        ]
+      },
+      "recommendation": {
+        "model": "gemma-4-e2b-it",
+        "alien": true,
+        "quality_score": 1,
+        "confidence": "demo-low"
+      },
+      "grok_alien_off_quality": 0.89,
+      "grok_alien_on_quality": 1,
+      "gemma_alien_off_quality": 0.44,
+      "gemma_alien_on_quality": 1
+    }
+  ]
+}

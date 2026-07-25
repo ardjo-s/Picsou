@@ -1,0 +1,190 @@
+{
+  "workflow_version": "1.0.0",
+  "evidence_mode": "frozen_openaire_style",
+  "captured_at": "2026-07-25",
+  "provenance": {
+    "source": "OpenAIRE Graph API",
+    "harvested_dois": [
+      "10.48550/arxiv.2505.07528",
+      "10.48550/arxiv.2603.07091"
+    ]
+  },
+  "researcher_profile": {
+    "role": "Hackathon jury — nightmare Track 3",
+    "focus": [
+      "Gemma-core",
+      "context engineering",
+      "judge-runnable demo"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "picsou-core-001",
+      "record": {
+        "openaire_id": "submission__::picsou-nm-core-001",
+        "title": "Picsou: packed OpenAIRE context makes Gemma 4 E2B enough",
+        "year": 2026,
+        "topics": [
+          "Gemma 4",
+          "context engineering",
+          "OpenAIRE"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.core.001"
+      },
+      "sources": [
+        {
+          "source_id": "core-001-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.core.001",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Picsou packs frozen OpenAIRE evidence so Gemma 4 E2B can triage attention; outputs are scored with exact-quote evidence gates."
+        },
+        {
+          "source_id": "core-001-demo",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.core.001",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Judges run npm test && npm run evaluate:matrix offline — no login, no paid API required for the fixture path."
+        }
+      ]
+    },
+    {
+      "case_id": "rag-halluc-paper-002",
+      "record": {
+        "openaire_id": "doi_dedup___::96185949f18e8d29b9fed514913297a0",
+        "title": "SEReDeEP: Hallucination Detection in Retrieval-Augmented Models via Semantic Entropy and Context-Parameter Fusion",
+        "year": 2025,
+        "topics": [
+          "RAG",
+          "hallucination",
+          "evaluation"
+        ],
+        "access": "open",
+        "doi": "10.48550/arxiv.2505.07528"
+      },
+      "sources": [
+        {
+          "source_id": "rag-002-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.48550/arxiv.2505.07528",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Retrieval-Augmented Generation (RAG) models frequently encounter hallucination phenomena when integrating external information with internal parametric knowledge. Empirical studies demonstrate that the disequilibrium between external contextual information and internal parametric knowledge constitutes a primary factor in hallucination generation. Existing hallucination detection methodologies predominantly emphasize "
+        },
+        {
+          "source_id": "rag-002-bait",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.48550/arxiv.2505.07528",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Looks Track-3-adjacent (context vs parameters) but is a research paper on hallucination detection, not a Gemma hackathon product demo."
+        },
+        {
+          "source_id": "rag-002-alien",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.48550/arxiv.2505.07528",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Alien type=research_paper (DOI 10.48550/arxiv.2505.07528): not a Track 3 product submission. SKIP."
+        }
+      ]
+    },
+    {
+      "case_id": "slm-arch-bench-003",
+      "record": {
+        "openaire_id": "doi_dedup___::0128654be7b28cd9cce72f9ec1788968",
+        "title": "Exploring the Reasoning Depth of Small Language Models in Software Architecture: A Multidimensional Evaluation Framework Towards Software Engineering 2.0",
+        "year": 2026,
+        "topics": [
+          "SLM",
+          "software architecture",
+          "benchmark"
+        ],
+        "access": "open",
+        "doi": "10.48550/arxiv.2603.07091"
+      },
+      "sources": [
+        {
+          "source_id": "slm-003-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.48550/arxiv.2603.07091",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "In the era of \"Software Engineering 2.0\" (SE 2.0), where intelligent agents collaborate with human engineers, Generative AI is advancing beyond code generation into Software Architecture (SA). While Large Language Models (LLMs) demonstrate superior capabilities, computational costs and data privacy concerns drive interest in Small Language Models (SLMs) with fewer than 7 billion parameters. However, the reasoning lim"
+        },
+        {
+          "source_id": "slm-003-bait",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.48550/arxiv.2603.07091",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Mentions Small Language Models extensively; no Gemma-core product, no judge-runnable Track 3 context packer."
+        },
+        {
+          "source_id": "slm-003-alien",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.48550/arxiv.2603.07091",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Alien type=benchmark_study: ADR generation eval, no Gemma-core demo. SKIP for Track 3 product shortlist."
+        }
+      ]
+    },
+    {
+      "case_id": "omnichat-wrapper-004",
+      "record": {
+        "openaire_id": "submission__::picsou-nm-omni-004",
+        "title": "OmniChat: GPT/Claude/Grok UI with optional Gemma dropdown",
+        "year": 2026,
+        "topics": [
+          "multi-model",
+          "chat UI"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.omni.004"
+      },
+      "sources": [
+        {
+          "source_id": "omni-004-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.omni.004",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "OmniChat defaults to GPT/Claude/Grok agent loops; Gemma appears only as an optional model dropdown without a context-engineering contract."
+        },
+        {
+          "source_id": "omni-004-alien",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.omni.004",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Alien eligibility: Gemma optional only; closed models default. SKIP Gemma-core requirement."
+        }
+      ]
+    },
+    {
+      "case_id": "edge-gemma-camera-005",
+      "record": {
+        "openaire_id": "submission__::picsou-nm-edge-005",
+        "title": "On-device Gemma 4 camera captioner for hikers",
+        "year": 2026,
+        "topics": [
+          "edge",
+          "Gemma",
+          "mobile"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.edge.005"
+      },
+      "sources": [
+        {
+          "source_id": "edge-005-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.edge.005",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Phone app runs Gemma 4 E2B offline for trail photo captions; writeup targets Track 1 Edge / On-Device, not Context Engineering for SLMs."
+        },
+        {
+          "source_id": "edge-005-alien",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.edge.005",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Alien track router: metadata.track=Edge/On-Device. SKIP for Context Engineering for SLMs."
+        }
+      ]
+    }
+  ]
+}

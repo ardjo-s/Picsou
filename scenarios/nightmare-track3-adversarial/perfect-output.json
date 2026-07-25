@@ -1,0 +1,55 @@
+{
+  "workflow_version": "1.0.0",
+  "results": [
+    {
+      "case_id": "picsou-core-001",
+      "title": "Picsou: packed OpenAIRE context makes Gemma 4 E2B enough",
+      "attention_fit": true,
+      "priority": "high",
+      "signals": [
+        {
+          "source_id": "core-001-abstract",
+          "signal_type": "relevance_hook",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.core.001",
+          "evidence_quote": "packs frozen OpenAIRE evidence so Gemma 4 E2B can triage",
+          "confidence": 0.97
+        },
+        {
+          "source_id": "core-001-demo",
+          "signal_type": "method_signal",
+          "source_url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.core.001",
+          "evidence_quote": "npm run evaluate:matrix offline",
+          "confidence": 0.97
+        }
+      ]
+    },
+    {
+      "case_id": "rag-halluc-paper-002",
+      "title": "SEReDeEP: Hallucination Detection in Retrieval-Augmented Models via Semantic Entropy and Context-Parameter Fusion",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "slm-arch-bench-003",
+      "title": "Exploring the Reasoning Depth of Small Language Models in Software Architecture: A Multidimensional Evaluation Framework Towards Software Engineering 2.0",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "omnichat-wrapper-004",
+      "title": "OmniChat: GPT/Claude/Grok UI with optional Gemma dropdown",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    },
+    {
+      "case_id": "edge-gemma-camera-005",
+      "title": "On-device Gemma 4 camera captioner for hikers",
+      "attention_fit": false,
+      "priority": "skip",
+      "signals": []
+    }
+  ]
+}

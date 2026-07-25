@@ -20,7 +20,7 @@ export function packContext(casesDocument, prompt) {
   return {
     system: prompt,
     user: [
-      "Triage every case in this packed OpenAIRE-style evidence packet.",
+      `Triage every case in this packed ${casesDocument.evidence_mode || "evidence"} packet.`,
       `workflow_version must be exactly ${casesDocument.workflow_version}.`,
       "Return only the required structured JSON.",
       JSON.stringify(

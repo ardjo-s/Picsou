@@ -1,0 +1,160 @@
+{
+  "workflow_version": "1.0.0",
+  "evidence_mode": "frozen_openaire_style",
+  "captured_at": "2026-07-25",
+  "provenance": {
+    "source": "OpenAIRE Graph API",
+    "harvested_dois": [
+      "10.1164/rccm.201409-1598oc",
+      "10.1001/jama.2020.23517"
+    ]
+  },
+  "researcher_profile": {
+    "role": "Pulmonologist — nightmare protocol fork",
+    "focus": [
+      "ARDS low tidal volume",
+      "avoid non-ARDS PEEP misapplication"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "ards-ltv-timing-001",
+      "record": {
+        "openaire_id": "doi_dedup___::55738d23bda340c6f9f84fc2f6db7bc5",
+        "title": "Timing of Low Tidal Volume Ventilation and Intensive Care Unit Mortality in Acute Respiratory Distress Syndrome. A Prospective Cohort Study",
+        "year": 2015,
+        "topics": [
+          "ARDS",
+          "tidal volume",
+          "ICU mortality"
+        ],
+        "access": "open",
+        "doi": "10.1164/rccm.201409-1598oc"
+      },
+      "sources": [
+        {
+          "source_id": "ards-001-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.1164/rccm.201409-1598oc",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Abstract Rationale Reducing tidal volume decreases mortality in acute respiratory distress syndrome (ARDS). However, the effect of the timing of low tidal volume ventilation is not well understood. Objectives To evaluate the association of intensive care unit (ICU) mortality with initial tidal volume and with tidal volume change over time. Methods Multivariable, time-varying Cox regression analysis of a multisite, pr"
+        },
+        {
+          "source_id": "ards-001-endpoint",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.1164/rccm.201409-1598oc",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "OpenAIRE-normalized: multisite prospective study of 482 patients with ARDS links tidal volume timing to ICU mortality using time-varying Cox models."
+        }
+      ]
+    },
+    {
+      "case_id": "peep-nonards-002",
+      "record": {
+        "openaire_id": "doi_dedup___::363aa92080076f654a70224c495da7da",
+        "title": "Effect of a Lower vs Higher Positive End-Expiratory Pressure Strategy on Ventilator-Free Days in ICU Patients Without ARDS",
+        "year": 2020,
+        "topics": [
+          "PEEP",
+          "ICU",
+          "non-ARDS"
+        ],
+        "access": "open",
+        "doi": "10.1001/jama.2020.23517"
+      },
+      "sources": [
+        {
+          "source_id": "peep-002-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.1001/jama.2020.23517",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "It is uncertain whether invasive ventilation can use lower positive end-expiratory pressure (PEEP) in critically ill patients without acute respiratory distress syndrome (ARDS).To determine whether a lower PEEP strategy is noninferior to a higher PEEP strategy regarding duration of mechanical ventilation at 28 days.Noninferiority randomized clinical trial conducted from October 26, 2017, through December 17, 2019, in"
+        },
+        {
+          "source_id": "peep-002-population",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.1001/jama.2020.23517",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Critical population gate: trial enrolled ICU patients WITHOUT ARDS (n=980, Netherlands). Primary outcome ventilator-free days, not ARDS tidal-volume protocol."
+        }
+      ]
+    },
+    {
+      "case_id": "mouse-biofilm-003",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-mouse-003",
+        "title": "Biofilm disruption reduces pneumonia markers in ventilated mice",
+        "year": 2024,
+        "topics": [
+          "VAP",
+          "animal"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.mouse.003"
+      },
+      "sources": [
+        {
+          "source_id": "mouse-003-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.mouse.003",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "In a murine mechanical-ventilation model, biofilm disruption cut lung bacterial counts by 2.1 log CFU; no human ICU outcomes are reported."
+        }
+      ]
+    },
+    {
+      "case_id": "vap-peds-004",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-vap-peds-004",
+        "title": "Preventive oral hygiene and VAP in paediatric intensive care",
+        "year": 2022,
+        "topics": [
+          "VAP",
+          "pediatric",
+          "oral care"
+        ],
+        "access": "open",
+        "doi": "10.23804/ejpd.2022.23.04.09"
+      },
+      "sources": [
+        {
+          "source_id": "vap-peds-004-abstract",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.23804/ejpd.2022.23.04.09",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Paediatric intensive care oral hygiene interventions are discussed for ventilator-associated pneumonia prevention; adult ICU generalizability is not established in the packed text."
+        }
+      ]
+    },
+    {
+      "case_id": "preprint-highpeep-005",
+      "record": {
+        "openaire_id": "doi_dedup__::picsou-nm-preprint-005",
+        "title": "Universal early high-PEEP for all hypoxemic adults — preprint claim",
+        "year": 2025,
+        "topics": [
+          "PEEP",
+          "preprint"
+        ],
+        "access": "open",
+        "doi": "10.0000/picsou.nm.preprint.005"
+      },
+      "sources": [
+        {
+          "source_id": "preprint-005-claim",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.preprint.005",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "A 2025 preprint claims universal early high-PEEP cut ICU mortality by 12 percentage points in hypoxemic adults."
+        },
+        {
+          "source_id": "preprint-005-flag",
+          "url": "https://explore.openaire.eu/search/publication?pid=10.0000/picsou.nm.preprint.005",
+          "captured_at": "2026-07-25",
+          "evidence_kind": "normalized_public_fact",
+          "text": "Packet editorial flag: analysis contradicted by larger multicenter data; do not change protocol on this preprint alone."
+        }
+      ]
+    }
+  ]
+}

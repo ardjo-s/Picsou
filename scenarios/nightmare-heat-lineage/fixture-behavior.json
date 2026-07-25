@@ -1,0 +1,39 @@
+{
+  "scenario_id": "nightmare-heat-lineage",
+  "note": "Grok 4.5 (reference_ceiling) stays near oracle on packed packets; DeepSeek external_control fails traps; Gemma+Alien matches ceiling quality at thrift cost.",
+  "mutations": {
+    "false": {
+      "slm_under_test": [
+        "set_high:us-phoenix-title-eu-002",
+        "set_high:paris-no2-old-003",
+        "set_high:llm-climatebench-004",
+        "set_high:heat-superseded-005"
+      ],
+      "larger_baseline": [
+        "set_high:us-phoenix-title-eu-002",
+        "set_high:heat-superseded-005"
+      ],
+      "external_control": [
+        "set_high:us-phoenix-title-eu-002",
+        "set_high:paris-no2-old-003",
+        "set_high:llm-climatebench-004",
+        "set_high:heat-superseded-005"
+      ],
+      "reference_ceiling": [
+        "set_high:heat-superseded-005"
+      ]
+    },
+    "true": {
+      "slm_under_test": [],
+      "larger_baseline": [
+        "set_high:heat-superseded-005"
+      ],
+      "external_control": [
+        "set_high:us-phoenix-title-eu-002",
+        "set_medium:llm-climatebench-004",
+        "set_high:heat-superseded-005"
+      ],
+      "reference_ceiling": []
+    }
+  }
+}
