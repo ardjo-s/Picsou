@@ -117,7 +117,7 @@ Models in `config/models.json`: `gemma-4-e2b-it`, `ministral-3b-instruct`,
 
 ## Demo examples
 
-Step-by-step offline demo: [docs/demo/README.md](docs/demo/README.md)
+Step-by-step offline demo: [docs/demo/README.md](docs/demo/README.md) · [docs/demo/HOW-IT-WORKS.md](docs/demo/HOW-IT-WORKS.md)
 
 Example fixture summary (committed): [docs/demo/matrix-fixture-summary.json](docs/demo/matrix-fixture-summary.json)
 
