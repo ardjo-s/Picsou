@@ -4,7 +4,7 @@ description: >-
   Write or refresh the public Picsou README from the method pillars: packing,
   exact-evidence scoring, Alien on/off thrift matrix, oracle vs reference
   ceiling, honest fit boundaries. Use when the user says /picsou-readme,
-  /piscou-readme, /picsou-method, or asks to update README messaging.
+  /piscou-readme, or asks to update README messaging.
 ---
 
 # /picsou-readme
@@ -13,8 +13,6 @@ Author or refresh **`README.md`** (public product surface) using the Picsou
 method. Prefer short sections. Use repo vocabulary.
 
 Do not claim live Alien MCP or live GPU runs unless this session actually ran them.
-
-`/picsou-method` is an alias for this skill (same job).
 
 ## When invoked
 
